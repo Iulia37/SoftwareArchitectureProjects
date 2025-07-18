@@ -1,0 +1,57 @@
+# Build results
+**/bin/
+**/obj/
+[Bb]uild/
+[Bb]uild[Ll]og.*
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio folders
+.vs/
+.vscode/
+.idea/
+
+# Rider
+*.DotSettings.user
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# DotCover
+*.dotCover
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# NuGet package files
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.assets.json
+PackageTmp/
+
+# Entity Framework Migrations
+Migrations/
+
+# Test Results
+TestResults/
+*.coverage
+*.coveragexml
+
+# ReSharper
+_ReSharper*/
+
+# SQL Server files
+*.mdf
+*.ldf
+
