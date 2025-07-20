@@ -1,0 +1,18 @@
+﻿@model IEnumerable<TaskManager.Domain.Models.TaskItem>
+
+<h1>Tasks</h1>
+<a href="/Tasks/Create">Add New Task</a>
+<ul>
+    @foreach (var task in Model)
+    {
+        <li>
+            @task.Title - @task.Description
+            <a class="btn alert-success m-3" href="/Tasks/Edit/@task.Id">
+                <i class="bi bi-pencil-square"></i>Edit
+            </a>
+            <a class="btn alert-danger m-3" href="/Tasks/Delete/@task.Id">
+                <i class="bi bi-trash"></i>Delete
+            </a>
+        </li>
+    }
+</ul>

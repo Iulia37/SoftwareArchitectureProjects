@@ -1,0 +1,18 @@
+﻿@model TaskManager.Domain.Models.TaskItem
+
+<h1>Adauga Task Nou</h1>
+<form asp-action="Create" method="post">
+    <div class="d-flex flex-column justify-content-between" style="height: 100px;">
+        <div>
+            <label>Titlu:</label>
+            <input asp-for="Title" />
+        </div>
+        <div>
+            <label>Descriere:</label>
+            <input asp-for="Description" />
+        </div>
+        <div>
+            <button type="submit">Add</button>
+        </div>
+    </div>
+</form>
