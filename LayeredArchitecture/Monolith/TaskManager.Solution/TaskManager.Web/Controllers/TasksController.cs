@@ -25,18 +25,16 @@ namespace TaskManager.Web.Controllers
         [HttpPost]
         public IActionResult Create(int projectId, TaskItem newTask)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _taskService.AddTask(newTask);
-                    return RedirectToAction("Show", "Projects", new { id = projectId });
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+                _taskService.AddTask(newTask);
+                return RedirectToAction("Show", "Projects", new { id = projectId });
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
             return View(newTask);
         }
 
@@ -51,18 +49,16 @@ namespace TaskManager.Web.Controllers
         [HttpPost]
         public IActionResult Edit(int id, TaskItem newTask)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _taskService.UpdateTask(id, newTask);
-                    return RedirectToAction("Show", "Projects", new { id = newTask.ProjectId });
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+                _taskService.UpdateTask(id, newTask);
+                return RedirectToAction("Show", "Projects", new { id = newTask.ProjectId });
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
             return View(newTask);
         }
 

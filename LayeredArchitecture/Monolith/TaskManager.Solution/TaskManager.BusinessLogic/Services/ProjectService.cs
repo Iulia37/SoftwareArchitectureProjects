@@ -32,12 +32,18 @@ namespace TaskManager.BusinessLogic.Services
             if (string.IsNullOrWhiteSpace(project.Name))
                 throw new ArgumentException("Project name is required!");
 
+            if (string.IsNullOrWhiteSpace(project.Description))
+                throw new ArgumentException("Project descriprion is required!");
+
             if (project.Name.Length > 100)
                 throw new ArgumentException("Project name can't be longer than 100 characters!");
 
             var existing = _projectRepo.GetAll().FirstOrDefault(p => p.Name == project.Name);
             if (existing != null)
                 throw new InvalidOperationException("A project with this name already exists!");
+
+            if (project.Deadline < DateTime.Now)
+                throw new ArgumentException("Deadline can not be in the past!");
 
             project.CreatedDate = DateTime.Now;
 
@@ -51,6 +57,9 @@ namespace TaskManager.BusinessLogic.Services
             if (project == null)
                 throw new ArgumentException("Project not found!");
 
+            if (string.IsNullOrWhiteSpace(project.Description))
+                throw new ArgumentException("Project descriprion is required!");
+
             if (string.IsNullOrWhiteSpace(newProject.Name))
                 throw new ArgumentException("Project name is required!");
 
@@ -60,6 +69,9 @@ namespace TaskManager.BusinessLogic.Services
             var existing = _projectRepo.GetAll().FirstOrDefault(p => p.Name == newProject.Name && p.Id != id);
             if (existing != null)
                 throw new InvalidOperationException("Another project with this name already exists!");
+
+            if (newProject.Deadline < DateTime.Now)
+                throw new ArgumentException("Deadline can not be in the past!");
 
             project.Name = newProject.Name;
             project.Description = newProject.Description;

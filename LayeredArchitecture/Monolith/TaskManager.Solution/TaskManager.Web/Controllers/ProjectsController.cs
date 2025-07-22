@@ -39,20 +39,17 @@ namespace TaskManager.Web.Controllers
 
         [HttpPost]
         public IActionResult Create(Project newProject) 
-        { 
-            if(ModelState.IsValid)
+        {
+            try
             {
-                try
-                {
-                    _projectService.AddProject(newProject);
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
-
+                _projectService.AddProject(newProject);
+                return RedirectToAction("Index");
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
             return View(newProject);
         }
 
@@ -69,18 +66,16 @@ namespace TaskManager.Web.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Project newProject)
         {
-            if(ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _projectService.UpdateProject(id, newProject);
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+                _projectService.UpdateProject(id, newProject);
+                return RedirectToAction("Index");
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
             return View(newProject);
         }
 

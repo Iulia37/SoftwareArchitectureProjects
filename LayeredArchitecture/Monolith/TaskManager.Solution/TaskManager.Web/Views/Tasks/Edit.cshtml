@@ -9,19 +9,16 @@
     <div class="mb-3">
         <label asp-for="Title" class="form-label fw-bold">Title:</label>
         <input asp-for="Title" class="form-control" placeholder="Task title" />
-        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="Description" class="form-label fw-bold">Description:</label>
         <input asp-for="Description" class="form-control" placeholder="Task description" />
-        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="Deadline" class="form-label fw-bold">Deadline:</label>
         <input asp-for="Deadline" type="date" class="form-control" />
-        <span asp-validation-for="Deadline" class="text-danger"></span>
     </div>
 
     <button class="btn alert-info w-100 mt-3" type="submit">
