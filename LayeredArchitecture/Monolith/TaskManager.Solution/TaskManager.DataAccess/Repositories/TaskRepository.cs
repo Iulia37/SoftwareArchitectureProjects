@@ -20,9 +20,9 @@ namespace TaskManager.DataAccess.Repositories
             return _context.TaskItems.Find(id);
         }
 
-        public IEnumerable<TaskItem> GetAll()
+        public IEnumerable<TaskItem> GetProjectTasks(int projectId)
         {
-            return _context.TaskItems.ToList();
+            return _context.TaskItems.Where(t => t.ProjectId == projectId);
         }
 
         public void Add(TaskItem task)
@@ -35,8 +35,11 @@ namespace TaskManager.DataAccess.Repositories
         {
             var task = _context.TaskItems.Find(id);
 
-            task.Title = newTask.Title;
-            task.Description = newTask.Description;
+            if(task != null)
+            {
+                task.Title = newTask.Title;
+                task.Description = newTask.Description;
+            }
 
             _context.SaveChanges();
         }

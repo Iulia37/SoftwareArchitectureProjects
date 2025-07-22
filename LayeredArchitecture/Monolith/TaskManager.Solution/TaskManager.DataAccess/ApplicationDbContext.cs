@@ -9,7 +9,6 @@ namespace TaskManager.DataAccess.Contexts
             : base(options)
         {
         }
-
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<Project> Projects { get; set; }
     }

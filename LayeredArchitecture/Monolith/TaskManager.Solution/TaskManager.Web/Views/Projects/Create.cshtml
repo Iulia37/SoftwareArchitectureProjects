@@ -1,0 +1,33 @@
+﻿@model TaskManager.Domain.Models.Project
+
+@if (!ViewData.ModelState.IsValid)
+{
+	<div class="alert alert-danger">
+		@foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+		{
+			<div>@error.ErrorMessage</div>
+		}
+	</div>
+}
+
+<h1>Create a new project</h1>
+
+<form asp-action="Create" method="post">
+	<div class="d-flex flex-column justify-content-between" style="height: 100px;">
+		<div>
+			<label>Project name</label>
+			<input asp-for="Name" />
+		</div>
+		<div>
+			<label>Description</label>
+			<textarea asp-for="Description"></textarea>
+		</div>
+		<div>
+			<label>Deadline</label>
+			<input asp-for="Deadline" type="date" class="form-control" />
+		</div>
+		<div>
+			<button type="submit" class="btn alert-success">Create</button>
+		</div>
+	</div>
+</form> 

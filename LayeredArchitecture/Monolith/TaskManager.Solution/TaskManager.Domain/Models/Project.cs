@@ -9,6 +9,7 @@ namespace TaskManager.Domain.Models
     public class Project
     {
         public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -16,7 +17,5 @@ namespace TaskManager.Domain.Models
         public DateTime CreatedDate { get; set; }
 
         public DateTime Deadline { get; set; }
-
-        public ICollection<TaskItem> ProjectTasks { get; set; }
     }
 }

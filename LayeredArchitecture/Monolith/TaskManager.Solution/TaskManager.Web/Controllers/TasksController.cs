@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskManager.Domain.Models;
 using TaskManager.Domain.Interfaces;
+using TaskManager.DataAccess.Migrations;
+using Microsoft.EntityFrameworkCore;
+using TaskManager.Business.Services;
 
 namespace TaskManager.Web.Controllers
 {
@@ -13,26 +16,28 @@ namespace TaskManager.Web.Controllers
             _taskService = taskService;
         }
 
-        public IActionResult Index()
+        public IActionResult Create(int projectId)
         {
-            var tasks = _taskService.GetAllTasks();
-            return View(tasks);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
+            var newTask = new TaskItem { ProjectId = projectId };
+            return View(newTask);
         }
 
         [HttpPost]
-        public IActionResult Create(TaskItem task)
+        public IActionResult Create(int projectId, TaskItem newTask)
         {
             if (ModelState.IsValid)
             {
-                _taskService.AddTask(task);
-                return RedirectToAction("Index");
+                try
+                {
+                    _taskService.AddTask(newTask);
+                    return RedirectToAction("Show", "Projects", new { id = projectId });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
-            return View(task);
+            return View(newTask);
         }
 
         public IActionResult Edit(int id)
@@ -48,16 +53,37 @@ namespace TaskManager.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _taskService.UpdateTask(id, newTask);
-                return RedirectToAction("Index");
+                try
+                {
+                    _taskService.UpdateTask(id, newTask);
+                    return RedirectToAction("Show", "Projects", new { id = newTask.ProjectId });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
             return View(newTask);
         }
 
         public IActionResult Delete(int id)
         {
+            var pId = _taskService.GetTaskById(id).ProjectId;
             _taskService.DeleteTask(id);
-            return RedirectToAction("Index");
+            return RedirectToAction("Show", "Projects", new { id = pId });
+        }
+
+        [HttpPost]
+        public IActionResult MarkCompleted(int id)
+        {
+            var task = _taskService.GetTaskById(id);
+            if (task != null)
+            {
+                _taskService.CompleteTask(id);
+                return RedirectToAction("Show", "Projects", new { id = task.ProjectId });
+            }
+
+            return RedirectToAction("Show", "Projects");
         }
     }
 }

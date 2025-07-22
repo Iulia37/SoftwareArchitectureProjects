@@ -9,16 +9,16 @@ namespace TaskManager.Domain.Interfaces
 {
     public interface ITaskService
     {
-        public IEnumerable<TaskItem> GetAllTasks();
+        IEnumerable<TaskItem> GetAllProjectTasks(int projectId);
 
-        public TaskItem GetTaskById(int id);
+        TaskItem GetTaskById(int id);
 
-        public void AddTask(TaskItem task);
+        void AddTask(TaskItem task);
 
-        public void UpdateTask(int id, TaskItem newTask);
+        void UpdateTask(int id, TaskItem newTask);
 
-        public void DeleteTask(int id);
+        void DeleteTask(int id);
 
-        public void CompleteTask(int id);
+        void CompleteTask(int id);
     }
 }

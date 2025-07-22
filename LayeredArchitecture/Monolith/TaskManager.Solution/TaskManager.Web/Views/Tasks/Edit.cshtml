@@ -1,19 +1,30 @@
 ﻿@model TaskManager.Domain.Models.TaskItem
 
-<h1>Edit Task</h1>
-<form asp-action="Edit" method="post">
-    <div class="d-flex flex-column justify-content-between" style="height: 100px;">
-        <input type="hidden" asp-for="Id" />
-        <div>
-            <label>Title:</label>
-            <input asp-for="Title" />
-        </div>
-        <div>
-            <label>Description:</label>
-            <input asp-for="Description" />
-        </div>
-        <div>
-            <button class="btn alert-success m-3" type="submit">Edit</button>
-        </div>
+<h1 class="mb-4 text-center">Edit Task</h1>
+
+<form asp-action="Edit" method="post" class="p-4 rounded shadow-sm bg-light" style="max-width:500px;margin:auto;">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ProjectId" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label fw-bold">Title:</label>
+        <input asp-for="Title" class="form-control" placeholder="Task title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-bold">Description:</label>
+        <input asp-for="Description" class="form-control" placeholder="Task description" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Deadline" class="form-label fw-bold">Deadline:</label>
+        <input asp-for="Deadline" type="date" class="form-control" />
+        <span asp-validation-for="Deadline" class="text-danger"></span>
+    </div>
+
+    <button class="btn alert-info w-100 mt-3" type="submit">
+        <i class="bi bi-pencil-square"></i> Save Changes
+    </button>
 </form>

@@ -4,7 +4,7 @@ using TaskManager.DataAccess.Contexts;
 using TaskManager.DataAccess.Repositories;
 using TaskManager.Domain.Repositories;
 using TaskManager.Domain.Interfaces;
-using TaskManager.DataAccess;
+using TaskManager.BusinessLogic.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 var app = builder.Build();
 
