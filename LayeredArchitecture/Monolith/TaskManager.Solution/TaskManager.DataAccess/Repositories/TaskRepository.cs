@@ -31,9 +31,9 @@ namespace TaskManager.DataAccess.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(int id, TaskItem newTask)
+        public void Update(TaskItem newTask)
         {
-            var task = _context.TaskItems.Find(id);
+            var task = _context.TaskItems.Find(newTask.Id);
 
             if(task != null)
             {

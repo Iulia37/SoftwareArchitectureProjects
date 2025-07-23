@@ -17,5 +17,9 @@ namespace TaskManager.Domain.Models
         public DateTime CreatedDate { get; set; }
 
         public DateTime Deadline { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public int UserId { get; set; }
     }
 }

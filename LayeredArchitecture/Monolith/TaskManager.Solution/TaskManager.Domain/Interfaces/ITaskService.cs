@@ -15,7 +15,7 @@ namespace TaskManager.Domain.Interfaces
 
         void AddTask(TaskItem task);
 
-        void UpdateTask(int id, TaskItem newTask);
+        void UpdateTask(TaskItem newTask);
 
         void DeleteTask(int id);
 

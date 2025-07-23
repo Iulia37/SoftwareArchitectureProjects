@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskManager.DataAccess.Migrations;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.Models;
 
@@ -17,7 +18,17 @@ namespace TaskManager.Web.Controllers
 
         public IActionResult Index()
         {
-            var projects = _projectService.GetAllProjects();
+            int? userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var projects = _projectService.GetAllProjects(userId.Value);
+
+            ViewBag.UserId = userId.Value;
+
             return View(projects);
         }
 
@@ -32,9 +43,10 @@ namespace TaskManager.Web.Controllers
             return View(project);
         }
         
-        public IActionResult Create()
+        public IActionResult Create(int userId)
         {
-            return View();
+            var newProject = new Project { UserId = userId };
+            return View(newProject);
         }
 
         [HttpPost]
@@ -64,11 +76,11 @@ namespace TaskManager.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, Project newProject)
+        public IActionResult Edit(Project newProject)
         {
             try
             {
-                _projectService.UpdateProject(id, newProject);
+                _projectService.UpdateProject(newProject);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -91,6 +103,26 @@ namespace TaskManager.Web.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return RedirectToAction("Index");
             }
+        }
+
+        [HttpPost]
+        public IActionResult MarkCompleted(int id)
+        {
+            var project = _projectService.GetProjectById(id);
+
+            if (project == null)
+                return NotFound();
+
+            var tasks = _taskService.GetAllProjectTasks(id);
+
+            if (tasks.Any(t => !t.IsCompleted))
+            {
+                TempData["Error"] = "There are still unfinished tasks!";
+                return RedirectToAction("Show", new { id });
+            }
+
+            _projectService.MarkCompleted(id);
+            return RedirectToAction("Show", new { id });
         }
     }
 }

@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using TaskManager.Business.Services;
+using TaskManager.BusinessLogic.Services;
 using TaskManager.DataAccess.Contexts;
 using TaskManager.DataAccess.Repositories;
 using TaskManager.Domain.Repositories;
 using TaskManager.Domain.Interfaces;
-using TaskManager.BusinessLogic.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +19,11 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -37,6 +41,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

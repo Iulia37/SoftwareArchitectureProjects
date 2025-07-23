@@ -3,7 +3,7 @@ using TaskManager.Domain.Models;
 using TaskManager.Domain.Interfaces;
 using TaskManager.DataAccess.Migrations;
 using Microsoft.EntityFrameworkCore;
-using TaskManager.Business.Services;
+using TaskManager.BusinessLogic.Services;
 
 namespace TaskManager.Web.Controllers
 {
@@ -23,12 +23,12 @@ namespace TaskManager.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(int projectId, TaskItem newTask)
+        public IActionResult Create(TaskItem newTask)
         {
             try
             {
                 _taskService.AddTask(newTask);
-                return RedirectToAction("Show", "Projects", new { id = projectId });
+                return RedirectToAction("Show", "Projects", new { id = newTask.ProjectId });
             }
             catch (Exception ex)
             {
@@ -47,11 +47,11 @@ namespace TaskManager.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, TaskItem newTask)
+        public IActionResult Edit(TaskItem newTask)
         {
             try
             {
-                _taskService.UpdateTask(id, newTask);
+                _taskService.UpdateTask(newTask);
                 return RedirectToAction("Show", "Projects", new { id = newTask.ProjectId });
             }
             catch (Exception ex)

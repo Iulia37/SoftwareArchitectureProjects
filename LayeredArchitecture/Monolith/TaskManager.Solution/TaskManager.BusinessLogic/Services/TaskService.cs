@@ -3,15 +3,17 @@ using TaskManager.Domain.Repositories;
 using TaskManager.Domain.Interfaces;
 using System.Collections.Generic;
 
-namespace TaskManager.Business.Services
+namespace TaskManager.BusinessLogic.Services
 {
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepo;
+        private readonly IProjectRepository _projectRepo;
 
-        public TaskService(ITaskRepository taskRepo)
+        public TaskService(ITaskRepository taskRepo, IProjectRepository projectRepo)
         {
             _taskRepo = taskRepo;
+            _projectRepo = projectRepo;
         }
 
         public IEnumerable<TaskItem> GetAllProjectTasks(int projectId)
@@ -29,8 +31,19 @@ namespace TaskManager.Business.Services
             if (string.IsNullOrWhiteSpace(task.Title))
                 throw new ArgumentException("Task title is required!");
 
+            if (string.IsNullOrWhiteSpace(task.Description))
+                throw new ArgumentException("Task description is required!");
+
             if (task.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");
+
+            var project = _projectRepo.GetById(task.ProjectId);
+            if (project == null)
+                throw new ArgumentException("Invalid project!");
+
+            if (task.Deadline > project.Deadline)
+                throw new ArgumentException("Task deadline cannot be after project's deadline!");
+
 
             task.CreatedDate = DateTime.Now;
             task.IsCompleted = false;
@@ -38,9 +51,9 @@ namespace TaskManager.Business.Services
             _taskRepo.Add(task);
         }
 
-        public void UpdateTask(int id, TaskItem updatedTask)
+        public void UpdateTask(TaskItem updatedTask)
         {
-            var task = _taskRepo.GetById(id);
+            var task = _taskRepo.GetById(updatedTask.Id);
             if (task == null)
                 throw new ArgumentException("There is no task with that id");
 
@@ -50,10 +63,18 @@ namespace TaskManager.Business.Services
             if (updatedTask.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");
 
+            var project = _projectRepo.GetById(task.ProjectId);
+            if (project == null)
+                throw new ArgumentException("Invalid project!");
+
+            if (task.Deadline > project.Deadline)
+                throw new ArgumentException("Task deadline cannot be after project's deadline!");
+
+
             task.Title = updatedTask.Title;
             task.Description = updatedTask.Description;
             task.Deadline = updatedTask.Deadline;
-            _taskRepo.Update(id, task);
+            _taskRepo.Update(task);
         }
 
         public void DeleteTask(int id)
@@ -71,7 +92,7 @@ namespace TaskManager.Business.Services
             if (task == null) return;
 
             task.IsCompleted = true;
-            _taskRepo.Update(id, task);
+            _taskRepo.Update(task);
         }
     }
 }

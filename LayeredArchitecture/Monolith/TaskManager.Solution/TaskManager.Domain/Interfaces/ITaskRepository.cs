@@ -7,7 +7,7 @@ namespace TaskManager.Domain.Repositories
         TaskItem GetById(int id);
         IEnumerable<TaskItem> GetProjectTasks(int projectId);
         void Add(TaskItem task);
-        void Update(int id, TaskItem newTask);
+        void Update(TaskItem newTask);
         void Delete(int id);
     }
 }

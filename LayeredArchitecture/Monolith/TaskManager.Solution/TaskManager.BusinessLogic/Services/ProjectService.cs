@@ -17,9 +17,9 @@ namespace TaskManager.BusinessLogic.Services
             _projectRepo = projectRepo;
         }
 
-        public IEnumerable<Project> GetAllProjects()
+        public IEnumerable<Project> GetAllProjects(int userId)
         {
-            return _projectRepo.GetAll();
+            return _projectRepo.GetAll(userId);
         }
 
         public Project GetProjectById(int id)
@@ -38,7 +38,7 @@ namespace TaskManager.BusinessLogic.Services
             if (project.Name.Length > 100)
                 throw new ArgumentException("Project name can't be longer than 100 characters!");
 
-            var existing = _projectRepo.GetAll().FirstOrDefault(p => p.Name == project.Name);
+            var existing = _projectRepo.GetAll(project.UserId).FirstOrDefault(p => p.Name == project.Name);
             if (existing != null)
                 throw new InvalidOperationException("A project with this name already exists!");
 
@@ -51,9 +51,9 @@ namespace TaskManager.BusinessLogic.Services
         }
 
 
-        public void UpdateProject(int id, Project newProject)
+        public void UpdateProject(Project newProject)
         {
-            var project = _projectRepo.GetById(id);
+            var project = _projectRepo.GetById(newProject.Id);
             if (project == null)
                 throw new ArgumentException("Project not found!");
 
@@ -66,10 +66,6 @@ namespace TaskManager.BusinessLogic.Services
             if (newProject.Name.Length > 100)
                 throw new ArgumentException("Project name can't be longer than 100 characters!");
 
-            var existing = _projectRepo.GetAll().FirstOrDefault(p => p.Name == newProject.Name && p.Id != id);
-            if (existing != null)
-                throw new InvalidOperationException("Another project with this name already exists!");
-
             if (newProject.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");
 
@@ -77,7 +73,7 @@ namespace TaskManager.BusinessLogic.Services
             project.Description = newProject.Description;
             project.Deadline = newProject.Deadline;
 
-            _projectRepo.Update(id, project);
+            _projectRepo.Update(project);
         }
 
 
@@ -88,6 +84,16 @@ namespace TaskManager.BusinessLogic.Services
                 throw new ArgumentException("Project not found!");
 
             _projectRepo.Delete(id);
+        }
+
+        public void MarkCompleted(int projectId)
+        {
+            var project = _projectRepo.GetById(projectId);
+            if (project == null)
+                throw new ArgumentException("Project not found!");
+
+            project.IsCompleted = true;
+            _projectRepo.Update(project);
         }
     }
 }

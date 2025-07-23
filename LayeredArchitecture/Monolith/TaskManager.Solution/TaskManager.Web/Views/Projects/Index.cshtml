@@ -11,7 +11,7 @@ else
 	<h6>There are currently no projects. Create a new one to start working!</h6>
 }
 
-<a class="btn alert-secondary m-3" asp-controller="Projects" asp-action="Create" method="post">
+<a class="btn alert-secondary m-3" asp-controller="Projects" asp-action="Create" asp-route-userId="@ViewBag.UserId" method="post">
 	New Project
 </a>
 
@@ -19,8 +19,12 @@ else
 {
 	<div class="card m-3">
 		<div class="card-body">
-			<h3 class="card-title alert-secondary p-3 rounded-2">
+			<h3 class="card-title alert-secondary p-3 rounded-2 d-flex align-items-center">
 				<a href="/Projects/Show/@project.Id" style="color: inherit; text-decoration: none">@project.Name</a>
+				@if (project.IsCompleted)
+				{
+					<span class="badge bg-success ms-2 align-middle" style="font-size:1rem; line-height:1;">Completed</span>
+				}
 			</h3>
 			<div class="card-description">
 				@project.Description
