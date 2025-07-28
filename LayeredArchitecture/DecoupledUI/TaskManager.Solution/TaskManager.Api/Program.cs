@@ -4,6 +4,9 @@ using TaskManager.DataAccess.Contexts;
 using TaskManager.DataAccess.Repositories;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.Repositories;
+using Nelibur.ObjectMapper;
+using TaskManager.Domain.Models;
+using TaskManager.DTO.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,15 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+TinyMapper.Bind<Project, ProjectDTO>();
+TinyMapper.Bind<ProjectDTO, Project>();
+
+TinyMapper.Bind<TaskItem, TaskItemDTO>();
+TinyMapper.Bind<TaskItemDTO, TaskItem>();
+
+TinyMapper.Bind<User, UserDTO>();
+TinyMapper.Bind<UserDTO, User>();
 
 builder.Services.AddCors(options =>
 {

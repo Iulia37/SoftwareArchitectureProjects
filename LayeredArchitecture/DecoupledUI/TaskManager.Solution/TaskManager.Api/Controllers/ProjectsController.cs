@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Nelibur.ObjectMapper;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.Models;
 using TaskManager.DTO.Models;
@@ -18,56 +19,11 @@ namespace TaskManager.API.Controllers
             _taskService = taskService;
         }
 
-        private ProjectDTO ToDto(Project project)
-        {
-            if (project == null) return null;
-            return new ProjectDTO
-            {
-                Id = project.Id,
-                Name = project.Name,
-                Description = project.Description,
-                CreatedDate = project.CreatedDate,
-                Deadline = project.Deadline,
-                IsCompleted = project.IsCompleted,
-                UserId = project.UserId
-            };
-        }
-
-        private Project FromDto(ProjectDTO dto)
-        {
-            if (dto == null) return null;
-            return new Project
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-                Description = dto.Description,
-                CreatedDate = dto.CreatedDate,
-                Deadline = dto.Deadline,
-                IsCompleted = dto.IsCompleted,
-                UserId = dto.UserId
-            };
-        }
-
-        private TaskItemDTO ToTaskDto(TaskItem task)
-        {
-            if (task == null) return null;
-            return new TaskItemDTO
-            {
-                Id = task.Id,
-                ProjectId = task.ProjectId,
-                Title = task.Title,
-                Description = task.Description,
-                Deadline = task.Deadline,
-                CreatedDate = task.CreatedDate,
-                IsCompleted = task.IsCompleted
-            };
-        }
-
         [HttpGet("user/{userId}")]
         public ActionResult<IEnumerable<ProjectDTO>> GetAllProjects(int userId)
         {
             var projects = _projectService.GetAllProjects(userId);
-            return Ok(projects.Select(ToDto));
+            return Ok(projects.Select(p => TinyMapper.Map<ProjectDTO>(p)));
         }
 
         [HttpGet("{id}")]
@@ -76,14 +32,14 @@ namespace TaskManager.API.Controllers
             var project = _projectService.GetProjectById(id);
             if (project == null)
                 return NotFound();
-            return Ok(ToDto(project));
+            return Ok(TinyMapper.Map<ProjectDTO>(project));
         }
 
         [HttpGet("{id}/tasks")]
         public ActionResult<IEnumerable<TaskItemDTO>> GetProjectTasks(int id)
         {
             var tasks = _taskService.GetAllProjectTasks(id);
-            return Ok(tasks.Select(ToTaskDto));
+            return Ok(tasks.Select(t => TinyMapper.Map<TaskItemDTO>(t)));
         }
 
         [HttpPost]
@@ -91,9 +47,12 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                var newProject = FromDto(newProjectDto);
+                var newProject = TinyMapper.Map<Project>(newProjectDto);
                 _projectService.AddProject(newProject);
-                return CreatedAtAction(nameof(GetProject), new { id = newProject.Id }, ToDto(newProject));
+                return CreatedAtAction( nameof(GetProject), 
+                                        new { id = newProject.Id }, 
+                                        TinyMapper.Map<ProjectDTO>(newProject)
+                                       );
             }
             catch (Exception ex)
             {
@@ -109,7 +68,7 @@ namespace TaskManager.API.Controllers
 
             try
             {
-                var updatedProject = FromDto(updatedProjectDto);
+                var updatedProject = TinyMapper.Map<Project>(updatedProjectDto);
                 _projectService.UpdateProject(updatedProject);
                 return NoContent();
             }

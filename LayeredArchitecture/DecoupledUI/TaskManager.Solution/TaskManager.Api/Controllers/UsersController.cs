@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Nelibur.ObjectMapper;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.Models;
 using TaskManager.DTO.Models;
@@ -14,26 +15,6 @@ namespace TaskManager.API.Controllers
         public UsersController(IUserService userService)
         {
             _userService = userService;
-        }
-
-        private UserDTO ToDto(User user)
-        {
-            if (user == null) return null;
-            return new UserDTO
-            {
-                Id = user.Id,
-                Username = user.Username
-            };
-        }
-
-        private User FromDto(UserDTO dto)
-        {
-            if (dto == null) return null;
-            return new User
-            {
-                Id = dto.Id,
-                Username = dto.Username
-            };
         }
 
         [HttpPost("register")]
@@ -56,7 +37,7 @@ namespace TaskManager.API.Controllers
             try
             {
                 var authenticatedUser = _userService.Authenticate(userDto.Username, userDto.Password);
-                return Ok(ToDto(authenticatedUser));
+                return Ok(TinyMapper.Map<UserDTO>(authenticatedUser));
             }
             catch (Exception ex)
             {
@@ -68,7 +49,7 @@ namespace TaskManager.API.Controllers
         public ActionResult<IEnumerable<UserDTO>> GetAll()
         {
             var users = _userService.GetAll();
-            return Ok(users.Select(ToDto));
+            return Ok(users.Select(u => TinyMapper.Map<UserDTO>(u)));
         }
 
         [HttpGet("{id}")]
@@ -77,7 +58,7 @@ namespace TaskManager.API.Controllers
             var user = _userService.GetById(id);
             if (user == null)
                 return NotFound();
-            return Ok(ToDto(user));
+            return Ok(TinyMapper.Map<UserDTO>(user));
         }
 
         [HttpPut("{id}")]
@@ -88,7 +69,7 @@ namespace TaskManager.API.Controllers
 
             try
             {
-                var user = FromDto(userDto);
+                var user = TinyMapper.Map<User>(userDto);
                 _userService.Update(user);
                 return NoContent();
             }

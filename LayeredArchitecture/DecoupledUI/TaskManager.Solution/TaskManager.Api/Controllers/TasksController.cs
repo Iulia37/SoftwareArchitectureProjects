@@ -2,6 +2,7 @@
 using TaskManager.Domain.Models;
 using TaskManager.Domain.Interfaces;
 using TaskManager.DTO.Models;
+using Nelibur.ObjectMapper;
 
 namespace TaskManager.API.Controllers
 {
@@ -16,54 +17,20 @@ namespace TaskManager.API.Controllers
             _taskService = taskService;
         }
 
-        private TaskItemDTO ToDto(TaskItem task)
-        {
-            if (task == null) 
-                return null;
-
-            return new TaskItemDTO
-            {
-                Id = task.Id,
-                ProjectId = task.ProjectId,
-                Title = task.Title,
-                Description = task.Description,
-                Deadline = task.Deadline,
-                CreatedDate = task.CreatedDate,
-                IsCompleted = task.IsCompleted
-            };
-        }
-
-        private TaskItem FromDto(TaskItemDTO dto)
-        {
-            if (dto == null) 
-                return null;
-
-            return new TaskItem
-            {
-                Id = dto.Id,
-                ProjectId = dto.ProjectId,
-                Title = dto.Title,
-                Description = dto.Description,
-                Deadline = dto.Deadline,
-                CreatedDate = dto.CreatedDate,
-                IsCompleted = dto.IsCompleted
-            };
-        }
-
         [HttpGet("{id}")]
         public ActionResult<TaskItemDTO> GetTask(int id)
         {
             var task = _taskService.GetTaskById(id);
             if (task == null)
                 return NotFound();
-            return Ok(ToDto(task));
+            return Ok(TinyMapper.Map<TaskItemDTO>(task));
         }
 
         [HttpGet("project/{projectId}")]
         public ActionResult<IEnumerable<TaskItemDTO>> GetTasksForProject(int projectId)
         {
             var tasks = _taskService.GetAllProjectTasks(projectId);
-            return Ok(tasks.Select(ToDto));
+            return Ok(tasks.Select(t => TinyMapper.Map<TaskItemDTO>(t)));
         }
 
         [HttpPost]
@@ -71,9 +38,12 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                var newTask = FromDto(newTaskDto);
+                var newTask = TinyMapper.Map<TaskItem>(newTaskDto);
                 _taskService.AddTask(newTask);
-                return CreatedAtAction(nameof(GetTask), new { id = newTask.Id }, ToDto(newTask));
+                return CreatedAtAction( nameof(GetTask), 
+                                        new { id = newTask.Id }, 
+                                        TinyMapper.Map<TaskItemDTO>(newTask)
+                                       );
             }
             catch (Exception ex)
             {
@@ -89,7 +59,7 @@ namespace TaskManager.API.Controllers
 
             try
             {
-                var updatedTask = FromDto(updatedTaskDto);
+                var updatedTask = TinyMapper.Map<TaskItem>(updatedTaskDto);
                 _taskService.UpdateTask(updatedTask);
                 return NoContent();
             }
