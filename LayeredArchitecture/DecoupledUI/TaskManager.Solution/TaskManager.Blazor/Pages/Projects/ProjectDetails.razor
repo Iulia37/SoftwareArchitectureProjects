@@ -1,0 +1,159 @@
+﻿@page "/projects/{id:int}"
+@using TaskManager.DTO.Models
+@inject ProjectService ProjectService
+@inject TaskService TaskService
+@inject NavigationManager NavigationManager
+
+<h1 class="mb-0">@project?.Name</h1>
+@if (project?.IsCompleted == true)
+{
+    <span class="badge bg-success align-middle ms-2" style="font-size:1.1rem; line-height:1;">Completed</span>
+}
+
+<hr />
+<p>@project?.Description</p>
+
+<h5>Tasks for this project:</h5>
+<hr />
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger">
+        @error
+    </div>
+}
+
+<ul class="list-group">
+    @foreach (var t in tasks)
+    {
+        <li class="list-group-item d-flex align-items-center justify-content-between">
+            @if (!t.IsCompleted)
+            {
+                <div style="display: flex; align-items: center;">
+                    <input type="checkbox" @onchange="async () => await MarkTaskCompleted(t.Id)" />
+                    <span class="ms-3">
+                        @t.Title - @t.Description
+                    </span>
+                </div>
+            }
+            else
+            {
+                <div style="display: flex; align-items: center;">
+                    <input type="checkbox" checked disabled />
+                    <span class="ms-3 text-decoration-line-through text-muted">
+                        @t.Title - @t.Description
+                    </span>
+                </div>
+            }
+            @if (!t.IsCompleted)
+            {
+                <div>
+                    <button class="btn alert-success m-1" @onclick="() => EditTask(t.Id)">Edit</button>
+                    <button class="btn alert-danger m-1" @onclick="async () => await DeleteTask(t.Id)">Delete</button>
+                </div>
+            }
+        </li>
+    }
+</ul>
+
+<div class="d-inline-flex">
+    @if (project?.IsCompleted == false)
+    {
+        <button class="btn alert-secondary m-3" @onclick="AddTask">Add task</button>
+        <button class="btn alert-info m-3" @onclick="EditProject">Edit project</button>
+        <button class="btn alert-success m-3" @onclick="async () => await MarkProjectCompleted()">Mark as completed</button>
+    }
+    <button class="btn alert-danger m-3" @onclick="async () => await DeleteProject()">Delete project</button>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+    ProjectDTO project;
+    List<TaskItemDTO> tasks = new();
+    string error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    async Task LoadData()
+    {
+        try
+        {
+            project = await ProjectService.GetProjectByIdAsync(id);
+            tasks = await TaskService.GetTasksForProjectAsync(id);
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    async Task MarkTaskCompleted(int taskId)
+    {
+        try
+        {
+            await TaskService.MarkTaskCompletedAsync(taskId);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    void EditTask(int taskId)
+    {
+        NavigationManager.NavigateTo($"/tasks/edit/{taskId}");
+    }
+
+    async Task DeleteTask(int taskId)
+    {
+        try
+        {
+            await TaskService.DeleteTaskAsync(taskId);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    void AddTask()
+    {
+        NavigationManager.NavigateTo($"/tasks/create/{project.Id}");
+    }
+
+    void EditProject()
+    {
+        NavigationManager.NavigateTo($"/projects/edit/{project.Id}");
+    }
+
+    async Task MarkProjectCompleted()
+    {
+        try
+        {
+            await ProjectService.MarkCompletedAsync(project.Id);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    async Task DeleteProject()
+    {
+        try
+        {
+            await ProjectService.DeleteProjectAsync(project.Id);
+            NavigationManager.NavigateTo("/projects");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}

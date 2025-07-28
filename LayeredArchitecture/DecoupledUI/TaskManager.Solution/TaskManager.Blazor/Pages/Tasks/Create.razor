@@ -1,0 +1,101 @@
+﻿@page "/tasks/create/{projectId:int}"
+@inject TaskService TaskService
+@inject NavigationManager NavigationManager
+@using TaskManager.DTO.Models
+@using System.ComponentModel.DataAnnotations
+
+<h1 class="mb-4 text-center">Add a new task</h1>
+
+@if (validationMessages?.Count > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var e in validationMessages)
+        {
+            <div>@e</div>
+        }
+    </div>
+}
+
+<EditForm Model="@task" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <input type="hidden" @bind="task.Id" />
+    <input type="hidden" @bind="task.ProjectId" />
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Title:</label>
+        <InputText @bind-Value="task.Title" class="form-control" placeholder="Task title" />
+        <ValidationMessage For="@(() => task.Title)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Description:</label>
+        <InputText @bind-Value="task.Description" class="form-control" placeholder="Task description" />
+        <ValidationMessage For="@(() => task.Description)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Deadline:</label>
+        <InputDate @bind-Value="task.Deadline" class="form-control" />
+        <ValidationMessage For="@(() => task.Deadline)" />
+    </div>
+
+    <button class="btn alert-info w-100 mt-3" type="submit">
+        <i class="bi bi-pencil-square"></i> Add task
+    </button>
+</EditForm>
+
+@code {
+    [Parameter] public int projectId { get; set; }
+    TaskItemDTO task = new();
+    string error;
+    List<string> validationMessages = new();
+
+    protected override void OnInitialized()
+    {
+        task.ProjectId = projectId;
+    }
+
+    async Task HandleValidSubmit()
+    {
+        validationMessages.Clear();
+        try
+        {
+            var created = await TaskService.CreateTaskAsync(task);
+            NavigationManager.NavigateTo($"/projects/{projectId}");
+        }
+        catch (HttpRequestException)
+        {
+            error = "Could not create task.";
+        }
+        catch (ValidationException vex)
+        {
+            validationMessages.Add(vex.Message);
+        }
+        catch (ApplicationException ex)
+        {
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(ex.Message);
+                if (doc.RootElement.TryGetProperty("errors", out var errorsProp))
+                {
+                    foreach (var property in errorsProp.EnumerateObject())
+                    {
+                        foreach (var err in property.Value.EnumerateArray())
+                        {
+                            validationMessages.Add(err.GetString());
+                        }
+                    }
+                }
+                else
+                {
+                    validationMessages.Add(ex.Message);
+                }
+            }
+            catch
+            {
+                validationMessages.Add(ex.Message);
+            }
+        }
+    }
+}

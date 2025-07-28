@@ -1,0 +1,76 @@
+﻿@page "/login"
+@using Blazored.LocalStorage
+@using TaskManager.DTO.Models
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+
+<h3>Login</h3>
+
+@if (validationMessages?.Count > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var e in validationMessages)
+        {
+            <div>@e</div>
+        }
+    </div>
+}
+
+<EditForm Model="user" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Username:</label>
+        <InputText @bind-Value="user.Username" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Password:</label>
+        <InputText @bind-Value="user.Password" type="password" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+    UserDTO user = new UserDTO();
+    string error;
+    List<string> validationMessages = new();
+
+    async Task HandleValidSubmit()
+    {
+        validationMessages.Clear();
+        try
+        {
+            var loggedUser = await UserService.LoginAsync(user);
+            await LocalStorage.SetItemAsync("user", loggedUser);
+            NavigationManager.NavigateTo("/", true);
+        }
+        catch (ApplicationException ex)
+        {
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(ex.Message);
+                if (doc.RootElement.TryGetProperty("errors", out var errorsProp))
+                {
+                    foreach (var property in errorsProp.EnumerateObject())
+                    {
+                        foreach (var err in property.Value.EnumerateArray())
+                        {
+                            validationMessages.Add(err.GetString());
+                        }
+                    }
+                }
+                else
+                {
+                    validationMessages.Add(ex.Message);
+                }
+            }
+            catch
+            {
+                validationMessages.Add(ex.Message);
+            }
+        }
+    }
+}

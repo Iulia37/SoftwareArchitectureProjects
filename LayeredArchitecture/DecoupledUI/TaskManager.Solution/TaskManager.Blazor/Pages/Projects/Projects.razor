@@ -1,0 +1,78 @@
+﻿@page "/projects"
+@inject ProjectService ProjectService
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@using TaskManager.DTO.Models
+
+@using TaskManager.DTO.Models
+
+<h3>Your Projects!</h3>
+
+@if (projects == null)
+{
+    <p>Loading...</p>
+}
+else if (projects.Count == 0)
+{
+    <h6>There are currently no projects. Create a new one to start working!</h6>
+}
+else
+{
+    <h6>Select a project to see its details, make changes, or add tasks.</h6>
+    
+    @foreach (var project in projects)
+    {
+        <div class="card m-3">
+            <div class="card-body">
+                <h3 class="card-title alert-secondary p-3 rounded-2 d-flex align-items-center">
+                    <a @onclick="() => OpenProject(project.Id)" style="color: inherit; text-decoration: none">@project.Name</a>
+                    @if (project.IsCompleted)
+                    {
+                        <span class="badge bg-success ms-2 align-middle" style="font-size:1rem; line-height:1;">Completed</span>
+                    }
+                </h3>
+                <div class="card-description">
+                    @project.Description
+                </div>
+                <div class="d-flex justify-content-between mt-5">
+                    <div class="d-flex gap-2">
+                        <div>Posted on </div>
+                        <div class="tag-container tag-blue">@project.CreatedDate.ToString("dd.MM.yyyy")</div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div>Due to </div>
+                        <div class="tag-container tag-blue">@project.Deadline.ToString("dd.MM.yyyy")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    List<ProjectDTO> projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedUser = await LocalStorage.GetItemAsync<UserDTO>("user");
+        projects = await ProjectService.GetAllProjectsForUserAsync(loggedUser.Id);
+    }
+
+    void OpenProject(int id)
+    {
+        NavigationManager.NavigateTo($"/projects/{id}");
+    }
+
+    async Task NewProject()
+    {
+        var user = await LocalStorage.GetItemAsync<UserDTO>("user");
+        if (user != null)
+        {
+            NavigationManager.NavigateTo($"/projects/create/{user.Id}");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+}

@@ -1,0 +1,86 @@
+﻿@page "/projects/edit/{id:int}"
+@inject ProjectService ProjectService
+@inject NavigationManager NavigationManager
+@using TaskManager.DTO.Models
+@using System.ComponentModel.DataAnnotations
+
+<h1 class="mb-4 text-center">Edit project</h1>
+
+@if (validationMessages?.Count > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var e in validationMessages)
+        {
+            <div>@e</div>
+        }
+    </div>
+}
+
+@if (project == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <EditForm Model="@project" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <input type="hidden" @bind="project.Id" />
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Name:</label>
+            <InputText @bind-Value="project.Name" class="form-control" placeholder="Project name" />
+            <ValidationMessage For="@(() => project.Name)" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Description:</label>
+            <InputText @bind-Value="project.Description" class="form-control" placeholder="Project description" />
+            <ValidationMessage For="@(() => project.Description)" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Deadline:</label>
+            <InputDate @bind-Value="project.Deadline" class="form-control" />
+            <ValidationMessage For="@(() => project.Deadline)" />
+        </div>
+        <button class="btn alert-info w-100 mt-3" type="submit">
+            <i class="bi bi-pencil-square"></i> Edit
+        </button>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    ProjectDTO project;
+    List<string> validationMessages = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            project = await ProjectService.GetProjectByIdAsync(id);
+        }
+        catch (Exception ex)
+        {
+            validationMessages.Clear();
+            validationMessages.Add("Could not load project.");
+        }
+    }
+
+    async Task HandleValidSubmit()
+    {
+        validationMessages.Clear();
+        try
+        {
+            await ProjectService.EditProjectAsync(project);
+            NavigationManager.NavigateTo($"/projects/{project.Id}");
+        }
+        catch (ApplicationException ex)
+        {
+            validationMessages.Add(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            validationMessages.Add(ex.Message);
+        }
+    }
+}

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TaskManager.Domain.Models.Project> 
+
+<h1>Your projects!</h1>
+
+@if(Model != null && Model.Any())
+{
+	<h6>Select a project to see its details, make changes, or add tasks.</h6>
+}
+else
+{
+	<h6>There are currently no projects. Create a new one to start working!</h6>
+}
+
+<a class="btn alert-secondary m-3" asp-controller="Projects" asp-action="Create" asp-route-userId="@ViewBag.UserId" method="post">
+	New Project
+</a>
+
+@foreach(var project in Model)
+{
+	<div class="card m-3">
+		<div class="card-body">
+			<h3 class="card-title alert-secondary p-3 rounded-2 d-flex align-items-center">
+				<a href="/Projects/Show/@project.Id" style="color: inherit; text-decoration: none">@project.Name</a>
+				@if (project.IsCompleted)
+				{
+					<span class="badge bg-success ms-2 align-middle" style="font-size:1rem; line-height:1;">Completed</span>
+				}
+			</h3>
+			<div class="card-description">
+				@project.Description
+			</div>
+			<div class="d-flex justify-content-between mt-5">
+				<div class="d-flex gap-2">
+					<div>Posted on </div>
+					<div class="tag-container tag-blue">@project.CreatedDate.ToString("dd.MM.yyyy")</div>
+				</div>
+				<div class="d-flex gap-2">
+					<div>Due to </div>
+					<div class="tag-container tag-blue">@project.Deadline.ToString("dd.MM.yyyy")</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

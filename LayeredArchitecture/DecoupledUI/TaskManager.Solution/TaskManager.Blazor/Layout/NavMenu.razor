@@ -1,0 +1,29 @@
+﻿@using Blazored.LocalStorage
+@using TaskManager.DTO.Models
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+
+<div class="mt-3">
+    <h4 class="m-3">TaskManager</h4>
+    @if (loggedUser != null)
+    {
+        <NavLink class="nav-link mt-5" href="/projects" Match="NavLinkMatch.All">Projects</NavLink>
+        <NavLink class="nav-link mt-5" href=@($"/projects/create/{loggedUser.Id}")>Add Project</NavLink>
+    }
+</div>
+
+@code {
+    UserDTO loggedUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedUser = await LocalStorage.GetItemAsync<UserDTO>("user");
+    }
+
+    async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("user");
+        loggedUser = null;
+        NavigationManager.NavigateTo("/", true);
+    }
+}
