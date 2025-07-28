@@ -18,11 +18,11 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] UserDTO userDto)
+        public IActionResult Register([FromBody] RegisterUserDTO registerDto)
         {
             try
             {
-                _userService.Register(userDto.Username, userDto.Password);
+                _userService.Register(registerDto.Username, registerDto.Password);
                 return Ok("User registered successfully.");
             }
             catch (Exception ex)
@@ -32,11 +32,11 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<UserDTO> Login([FromBody] UserDTO userDto)
+        public ActionResult<UserDTO> Login([FromBody] UserDTO loginDto)
         {
             try
             {
-                var authenticatedUser = _userService.Authenticate(userDto.Username, userDto.Password);
+                var authenticatedUser = _userService.Authenticate(loginDto.Username, loginDto.Password);
                 return Ok(TinyMapper.Map<UserDTO>(authenticatedUser));
             }
             catch (Exception ex)

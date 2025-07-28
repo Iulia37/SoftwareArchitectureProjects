@@ -28,12 +28,6 @@ namespace TaskManager.BusinessLogic.Services
 
         public void AddTask(TaskItem task)
         {
-            if (string.IsNullOrWhiteSpace(task.Title))
-                throw new ArgumentException("Task title is required!");
-
-            if (string.IsNullOrWhiteSpace(task.Description))
-                throw new ArgumentException("Task description is required!");
-
             if (task.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");
 
@@ -56,9 +50,6 @@ namespace TaskManager.BusinessLogic.Services
             var task = _taskRepo.GetById(updatedTask.Id);
             if (task == null)
                 throw new ArgumentException("There is no task with that id");
-
-            if (string.IsNullOrWhiteSpace(updatedTask.Title))
-                throw new ArgumentException("Task title is required!");
 
             if (updatedTask.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");

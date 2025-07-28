@@ -23,9 +23,9 @@ public class UserService
         return await _http.GetFromJsonAsync<UserDTO>($"api/users/{id}");
     }
 
-    public async Task RegisterAsync(UserDTO user)
+    public async Task RegisterAsync(RegisterUserDTO registerDto)
     {
-        var response = await _http.PostAsJsonAsync("api/users/register", user);
+        var response = await _http.PostAsJsonAsync("api/users/register", registerDto);
         if (!response.IsSuccessStatusCode)
         {
             var errorMsg = await response.Content.ReadAsStringAsync();
@@ -33,9 +33,9 @@ public class UserService
         }
     }
 
-    public async Task<UserDTO> LoginAsync(UserDTO user)
+    public async Task<UserDTO> LoginAsync(LoginUserDTO loginDto)
     {
-        var response = await _http.PostAsJsonAsync("api/users/login", user);
+        var response = await _http.PostAsJsonAsync("api/users/login", loginDto);
         if (!response.IsSuccessStatusCode)
         {
             var errorMsg = await response.Content.ReadAsStringAsync();

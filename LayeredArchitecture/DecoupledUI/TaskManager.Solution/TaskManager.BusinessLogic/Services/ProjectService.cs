@@ -29,14 +29,6 @@ namespace TaskManager.BusinessLogic.Services
 
         public void AddProject(Project project)
         {
-            if (string.IsNullOrWhiteSpace(project.Name))
-                throw new ArgumentException("Project name is required!");
-
-            if (string.IsNullOrWhiteSpace(project.Description))
-                throw new ArgumentException("Project descriprion is required!");
-
-            if (project.Name.Length > 100)
-                throw new ArgumentException("Project name can't be longer than 100 characters!");
 
             var existing = _projectRepo.GetAll(project.UserId).FirstOrDefault(p => p.Name == project.Name);
             if (existing != null)
@@ -56,15 +48,6 @@ namespace TaskManager.BusinessLogic.Services
             var project = _projectRepo.GetById(newProject.Id);
             if (project == null)
                 throw new ArgumentException("Project not found!");
-
-            if (string.IsNullOrWhiteSpace(newProject.Description))
-                throw new ArgumentException("Project description is required!");
-
-            if (string.IsNullOrWhiteSpace(newProject.Name))
-                throw new ArgumentException("Project name is required!");
-
-            if (newProject.Name.Length > 100)
-                throw new ArgumentException("Project name can't be longer than 100 characters!");
 
             if (newProject.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");
