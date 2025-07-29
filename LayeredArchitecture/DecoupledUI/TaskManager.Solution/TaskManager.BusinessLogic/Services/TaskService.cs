@@ -16,14 +16,14 @@ namespace TaskManager.BusinessLogic.Services
             _projectRepo = projectRepo;
         }
 
-        public IEnumerable<TaskItem> GetAllProjectTasks(int projectId)
+        public IEnumerable<TaskItem> GetTasksByProjectId(int projectId)
         {
-            return _taskRepo.GetProjectTasks(projectId);
+            return _taskRepo.GetTasksByProjectId(projectId);
         }
 
         public TaskItem GetTaskById(int id)
         {
-            return _taskRepo.GetById(id);
+            return _taskRepo.GetTaskById(id);
         }
 
         public void AddTask(TaskItem task)
@@ -31,7 +31,7 @@ namespace TaskManager.BusinessLogic.Services
             if (task.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");
 
-            var project = _projectRepo.GetById(task.ProjectId);
+            var project = _projectRepo.GetProjectById(task.ProjectId);
             if (project == null)
                 throw new ArgumentException("Invalid project!");
 
@@ -42,19 +42,19 @@ namespace TaskManager.BusinessLogic.Services
             task.CreatedDate = DateTime.Now;
             task.IsCompleted = false;
 
-            _taskRepo.Add(task);
+            _taskRepo.AddTask(task);
         }
 
         public void UpdateTask(TaskItem updatedTask)
         {
-            var task = _taskRepo.GetById(updatedTask.Id);
+            var task = _taskRepo.GetTaskById(updatedTask.Id);
             if (task == null)
                 throw new ArgumentException("There is no task with that id");
 
             if (updatedTask.Deadline < DateTime.Now)
                 throw new ArgumentException("Deadline can not be in the past!");
 
-            var project = _projectRepo.GetById(task.ProjectId);
+            var project = _projectRepo.GetProjectById(task.ProjectId);
             if (project == null)
                 throw new ArgumentException("Invalid project!");
 
@@ -65,25 +65,25 @@ namespace TaskManager.BusinessLogic.Services
             task.Title = updatedTask.Title;
             task.Description = updatedTask.Description;
             task.Deadline = updatedTask.Deadline;
-            _taskRepo.Update(task);
+            _taskRepo.UpdateTask(task);
         }
 
         public void DeleteTask(int id)
         {
-            var task = _taskRepo.GetById(id);
+            var task = _taskRepo.GetTaskById(id);
             if (task == null)
                 throw new ArgumentException("There is no task with that id");
 
-            _taskRepo.Delete(id);
+            _taskRepo.DeleteTask(id);
         }
 
-        public void CompleteTask(int id)
+        public void MarkTaskCompleted(int id)
         {
-            var task = _taskRepo.GetById(id);
+            var task = _taskRepo.GetTaskById(id);
             if (task == null) return;
 
             task.IsCompleted = true;
-            _taskRepo.Update(task);
+            _taskRepo.UpdateTask(task);
         }
     }
 }

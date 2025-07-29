@@ -50,7 +50,7 @@ public class ProjectService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task MarkCompletedAsync(int id)
+    public async Task MarkProjectCompletedAsync(int id)
     {
         var response = await _http.PostAsync($"api/projects/{id}/complete", null);
         if (!response.IsSuccessStatusCode)

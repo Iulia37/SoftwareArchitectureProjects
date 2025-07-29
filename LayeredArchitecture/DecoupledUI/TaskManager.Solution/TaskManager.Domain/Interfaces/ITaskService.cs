@@ -9,7 +9,7 @@ namespace TaskManager.Domain.Interfaces
 {
     public interface ITaskService
     {
-        IEnumerable<TaskItem> GetAllProjectTasks(int projectId);
+        IEnumerable<TaskItem> GetTasksByProjectId(int projectId);
 
         TaskItem GetTaskById(int id);
 
@@ -19,6 +19,6 @@ namespace TaskManager.Domain.Interfaces
 
         void DeleteTask(int id);
 
-        void CompleteTask(int id);
+        void MarkTaskCompleted(int id);
     }
 }

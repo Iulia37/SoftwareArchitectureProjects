@@ -4,11 +4,11 @@ namespace TaskManager.Domain.Interfaces
 {
 	public interface IUserRepository
 	{
-		User GetById(int id);
-		User GetByUsername(string username);
-		void Add(User user);
-		void Update(User user);
-		void Delete(int id);
-		IEnumerable<User> GetAll();
+		User GetUserById(int id);
+		User GetUserByUsername(string username);
+		void AddUser(User user);
+		void UpdateUser(User user);
+		void DeleteUser(int id);
+		IEnumerable<User> GetAllUsers();
 	}
 }

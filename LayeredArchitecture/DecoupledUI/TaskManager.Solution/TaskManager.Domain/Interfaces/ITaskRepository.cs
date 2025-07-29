@@ -4,10 +4,10 @@ namespace TaskManager.Domain.Repositories
 {
     public interface ITaskRepository
     {
-        TaskItem GetById(int id);
-        IEnumerable<TaskItem> GetProjectTasks(int projectId);
-        void Add(TaskItem task);
-        void Update(TaskItem newTask);
-        void Delete(int id);
+        TaskItem GetTaskById(int id);
+        IEnumerable<TaskItem> GetTasksByProjectId(int projectId);
+        void AddTask(TaskItem task);
+        void UpdateTask(TaskItem newTask);
+        void DeleteTask(int id);
     }
 }

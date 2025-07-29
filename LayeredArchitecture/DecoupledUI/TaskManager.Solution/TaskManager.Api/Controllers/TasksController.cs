@@ -18,7 +18,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<TaskItemDTO> GetTask(int id)
+        public ActionResult<TaskItemDTO> GetTaskById(int id)
         {
             var task = _taskService.GetTaskById(id);
             if (task == null)
@@ -27,20 +27,20 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpGet("project/{projectId}")]
-        public ActionResult<IEnumerable<TaskItemDTO>> GetTasksForProject(int projectId)
+        public ActionResult<IEnumerable<TaskItemDTO>> GetTasksByProjectId(int projectId)
         {
-            var tasks = _taskService.GetAllProjectTasks(projectId);
+            var tasks = _taskService.GetTasksByProjectId(projectId);
             return Ok(tasks.Select(t => TinyMapper.Map<TaskItemDTO>(t)));
         }
 
         [HttpPost]
-        public ActionResult<TaskItemDTO> Create([FromBody] TaskItemDTO newTaskDto)
+        public ActionResult<TaskItemDTO> CreateTask([FromBody] TaskItemDTO newTaskDto)
         {
             try
             {
                 var newTask = TinyMapper.Map<TaskItem>(newTaskDto);
                 _taskService.AddTask(newTask);
-                return CreatedAtAction( nameof(GetTask), 
+                return CreatedAtAction( nameof(GetTaskById), 
                                         new { id = newTask.Id }, 
                                         TinyMapper.Map<TaskItemDTO>(newTask)
                                        );
@@ -52,7 +52,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Edit(int id, [FromBody] TaskItemDTO updatedTaskDto)
+        public IActionResult EditTask(int id, [FromBody] TaskItemDTO updatedTaskDto)
         {
             if (id != updatedTaskDto.Id)
                 return BadRequest("ID mismatch.");
@@ -70,7 +70,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteTask(int id)
         {
             var task = _taskService.GetTaskById(id);
             if (task == null)
@@ -81,13 +81,13 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpPost("{id}/complete")]
-        public IActionResult MarkCompleted(int id)
+        public IActionResult MarkTaskCompleted(int id)
         {
             var task = _taskService.GetTaskById(id);
             if (task == null)
                 return NotFound();
 
-            _taskService.CompleteTask(id);
+            _taskService.MarkTaskCompleted(id);
             return NoContent();
         }
     }

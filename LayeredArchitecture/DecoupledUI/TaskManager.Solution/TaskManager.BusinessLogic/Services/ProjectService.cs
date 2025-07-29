@@ -17,20 +17,20 @@ namespace TaskManager.BusinessLogic.Services
             _projectRepo = projectRepo;
         }
 
-        public IEnumerable<Project> GetAllProjects(int userId)
+        public IEnumerable<Project> GetProjectsByUserId(int userId)
         {
-            return _projectRepo.GetAll(userId);
+            return _projectRepo.GetProjectsByUserId(userId);
         }
 
         public Project GetProjectById(int id)
         {
-            return _projectRepo.GetById(id);
+            return _projectRepo.GetProjectById(id);
         }
 
         public void AddProject(Project project)
         {
 
-            var existing = _projectRepo.GetAll(project.UserId).FirstOrDefault(p => p.Name == project.Name);
+            var existing = _projectRepo.GetProjectsByUserId(project.UserId).FirstOrDefault(p => p.Name == project.Name);
             if (existing != null)
                 throw new InvalidOperationException("A project with this name already exists!");
 
@@ -39,13 +39,13 @@ namespace TaskManager.BusinessLogic.Services
 
             project.CreatedDate = DateTime.Now;
 
-            _projectRepo.Add(project);
+            _projectRepo.AddProject(project);
         }
 
 
         public void UpdateProject(Project newProject)
         {
-            var project = _projectRepo.GetById(newProject.Id);
+            var project = _projectRepo.GetProjectById(newProject.Id);
             if (project == null)
                 throw new ArgumentException("Project not found!");
 
@@ -56,27 +56,27 @@ namespace TaskManager.BusinessLogic.Services
             project.Description = newProject.Description;
             project.Deadline = newProject.Deadline;
 
-            _projectRepo.Update(project);
+            _projectRepo.UpdateProject(project);
         }
 
 
         public void DeleteProject(int id)
         {
-            var project = _projectRepo.GetById(id);
+            var project = _projectRepo.GetProjectById(id);
             if (project == null)
                 throw new ArgumentException("Project not found!");
 
-            _projectRepo.Delete(id);
+            _projectRepo.DeleteProject(id);
         }
 
-        public void MarkCompleted(int projectId)
+        public void MarkProjectCompleted(int projectId)
         {
-            var project = _projectRepo.GetById(projectId);
+            var project = _projectRepo.GetProjectById(projectId);
             if (project == null)
                 throw new ArgumentException("Project not found!");
 
             project.IsCompleted = true;
-            _projectRepo.Update(project);
+            _projectRepo.UpdateProject(project);
         }
     }
 }

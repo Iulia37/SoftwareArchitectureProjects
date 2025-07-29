@@ -19,20 +19,20 @@ namespace TaskManager.DataAccess.Repositories
 			_projectRepo = projectRepo;
         }
 
-		public User GetById(int id)
+		public User GetUserById(int id)
 		{
 			return _context.Users.Find(id);
 		}
-		public User GetByUsername(string username)
+		public User GetUserByUsername(string username)
 		{
 			return _context.Users.FirstOrDefault(u => u.Username == username);
 		}
-		public void Add(User user)
+		public void AddUser(User user)
 		{
 			_context.Users.Add(user);
 		    _context.SaveChanges();
 		}
-		public void Update(User newUser)
+		public void UpdateUser(User newUser)
 		{
 			var user = _context.Users.Find(newUser.Id);
 
@@ -44,11 +44,11 @@ namespace TaskManager.DataAccess.Repositories
 
 			_context.SaveChanges();
 		}
-		public void Delete(int id)
+		public void DeleteUser(int id)
 		{
 			var user = _context.Users.Find(id);
 
-			var projects = _projectRepo.GetAll(id);
+			var projects = _projectRepo.GetProjectsByUserId(id);
 
 			if (user != null)
 			{
@@ -56,13 +56,13 @@ namespace TaskManager.DataAccess.Repositories
 
 				foreach(var p in projects)
 				{
-					_projectRepo.Delete(p.Id);
+					_projectRepo.DeleteProject(p.Id);
 				}
 
 				_context.SaveChanges();
 			}
 		}
-		public IEnumerable<User> GetAll()
+		public IEnumerable<User> GetAllUsers()
 		{
 			return _context.Users.ToList();
 		}

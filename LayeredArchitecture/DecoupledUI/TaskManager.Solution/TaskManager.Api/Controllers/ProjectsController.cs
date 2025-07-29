@@ -20,14 +20,14 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        public ActionResult<IEnumerable<ProjectDTO>> GetAllProjects(int userId)
+        public ActionResult<IEnumerable<ProjectDTO>> GetProjectsByUserId(int userId)
         {
-            var projects = _projectService.GetAllProjects(userId);
+            var projects = _projectService.GetProjectsByUserId(userId);
             return Ok(projects.Select(p => TinyMapper.Map<ProjectDTO>(p)));
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProjectDTO> GetProject(int id)
+        public ActionResult<ProjectDTO> GetProjectById(int id)
         {
             var project = _projectService.GetProjectById(id);
             if (project == null)
@@ -36,20 +36,20 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpGet("{id}/tasks")]
-        public ActionResult<IEnumerable<TaskItemDTO>> GetProjectTasks(int id)
+        public ActionResult<IEnumerable<TaskItemDTO>> GetTasksByProjectId(int id)
         {
-            var tasks = _taskService.GetAllProjectTasks(id);
+            var tasks = _taskService.GetTasksByProjectId(id);
             return Ok(tasks.Select(t => TinyMapper.Map<TaskItemDTO>(t)));
         }
 
         [HttpPost]
-        public ActionResult<ProjectDTO> Create([FromBody] ProjectDTO newProjectDto)
+        public ActionResult<ProjectDTO> CreateProject([FromBody] ProjectDTO newProjectDto)
         {
             try
             {
                 var newProject = TinyMapper.Map<Project>(newProjectDto);
                 _projectService.AddProject(newProject);
-                return CreatedAtAction( nameof(GetProject), 
+                return CreatedAtAction( nameof(GetProjectById), 
                                         new { id = newProject.Id }, 
                                         TinyMapper.Map<ProjectDTO>(newProject)
                                        );
@@ -61,7 +61,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Edit(int id, [FromBody] ProjectDTO updatedProjectDto)
+        public IActionResult EditProject(int id, [FromBody] ProjectDTO updatedProjectDto)
         {
             if (id != updatedProjectDto.Id)
                 return BadRequest("ID mismatch.");
@@ -79,7 +79,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteProject(int id)
         {
             try
             {
@@ -93,20 +93,20 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpPost("{id}/complete")]
-        public IActionResult MarkCompleted(int id)
+        public IActionResult MarkProjectCompleted(int id)
         {
             var project = _projectService.GetProjectById(id);
             if (project == null)
                 return NotFound();
 
-            var tasks = _taskService.GetAllProjectTasks(id);
+            var tasks = _taskService.GetTasksByProjectId(id);
 
             if (tasks.Any(t => !t.IsCompleted))
             {
                 return BadRequest("There are still unfinished tasks!");
             }
 
-            _projectService.MarkCompleted(id);
+            _projectService.MarkProjectCompleted(id);
             return NoContent();
         }
     }

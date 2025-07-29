@@ -9,10 +9,10 @@ namespace TaskManager.Domain.Interfaces
 {
     public interface IProjectRepository
     {
-        Project GetById(int id);
-        IEnumerable<Project> GetAll(int userId);
-        void Add(Project project);
-        void Update(Project newProject);
-        void Delete(int id);
+        Project GetProjectById(int id);
+        IEnumerable<Project> GetProjectsByUserId(int userId);
+        void AddProject(Project project);
+        void UpdateProject(Project newProject);
+        void DeleteProject(int id);
     }
 }

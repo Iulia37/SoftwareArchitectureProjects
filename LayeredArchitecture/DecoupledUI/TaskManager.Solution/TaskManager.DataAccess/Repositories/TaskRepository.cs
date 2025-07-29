@@ -15,23 +15,23 @@ namespace TaskManager.DataAccess.Repositories
             _context = context;
         }
 
-        public TaskItem GetById(int id)
+        public TaskItem GetTaskById(int id)
         {
             return _context.TaskItems.Find(id);
         }
 
-        public IEnumerable<TaskItem> GetProjectTasks(int projectId)
+        public IEnumerable<TaskItem> GetTasksByProjectId(int projectId)
         {
             return _context.TaskItems.Where(t => t.ProjectId == projectId);
         }
 
-        public void Add(TaskItem task)
+        public void AddTask(TaskItem task)
         {
             _context.TaskItems.Add(task);
             _context.SaveChanges();
         }
 
-        public void Update(TaskItem newTask)
+        public void UpdateTask(TaskItem newTask)
         {
             var task = _context.TaskItems.Find(newTask.Id);
 
@@ -44,7 +44,7 @@ namespace TaskManager.DataAccess.Repositories
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void DeleteTask(int id)
         {
             var task = _context.TaskItems.Find(id);
             if (task != null)

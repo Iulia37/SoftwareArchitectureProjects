@@ -22,7 +22,7 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                _userService.Register(registerDto.Username, registerDto.Password);
+                _userService.RegisterUser(registerDto.Username, registerDto.Password);
                 return Ok("User registered successfully.");
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                var authenticatedUser = _userService.Authenticate(loginDto.Username, loginDto.Password);
+                var authenticatedUser = _userService.AuthenticateUser(loginDto.Username, loginDto.Password);
                 return Ok(TinyMapper.Map<UserDTO>(authenticatedUser));
             }
             catch (Exception ex)
@@ -46,23 +46,23 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDTO>> GetAll()
+        public ActionResult<IEnumerable<UserDTO>> GetAllUsers()
         {
-            var users = _userService.GetAll();
+            var users = _userService.GetAllUsers();
             return Ok(users.Select(u => TinyMapper.Map<UserDTO>(u)));
         }
 
         [HttpGet("{id}")]
-        public ActionResult<UserDTO> GetById(int id)
+        public ActionResult<UserDTO> GetUserById(int id)
         {
-            var user = _userService.GetById(id);
+            var user = _userService.GetUserById(id);
             if (user == null)
                 return NotFound();
             return Ok(TinyMapper.Map<UserDTO>(user));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Edit(int id, [FromBody] UserDTO userDto)
+        public IActionResult EditUser(int id, [FromBody] UserDTO userDto)
         {
             if (id != userDto.Id)
                 return BadRequest("ID mismatch.");
@@ -70,7 +70,7 @@ namespace TaskManager.API.Controllers
             try
             {
                 var user = TinyMapper.Map<User>(userDto);
-                _userService.Update(user);
+                _userService.UpdateUser(user);
                 return NoContent();
             }
             catch (Exception ex)
@@ -80,15 +80,15 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteUser(int id)
         {
-            var user = _userService.GetById(id);
+            var user = _userService.GetUserById(id);
             if (user == null)
                 return NotFound();
 
             try
             {
-                _userService.Delete(id);
+                _userService.DeleteUser(id);
                 return NoContent();
             }
             catch (Exception ex)

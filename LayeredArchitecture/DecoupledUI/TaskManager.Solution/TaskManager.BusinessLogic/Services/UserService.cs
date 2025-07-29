@@ -15,39 +15,39 @@ namespace TaskManager.BusinessLogic.Services
 			_userRepository = userRepository;
 		}
 
-		public User GetById(int id)
+		public User GetUserById(int id)
 		{
-			var user = _userRepository.GetById(id);
+			var user = _userRepository.GetUserById(id);
 			if (user == null)
 				throw new ArgumentException("User not found!");
 			return user;
 		}
 
-		public User GetByUsername(string username)
+		public User GetUserByUsername(string username)
 		{
-			var user = _userRepository.GetByUsername(username);
+			var user = _userRepository.GetUserByUsername(username);
 			if (user == null)
 				throw new ArgumentException("User not found!");
 			return user;
 		}
 
-		public IEnumerable<User> GetAll()
+		public IEnumerable<User> GetAllUsers()
 		{
-			return _userRepository.GetAll();
+			return _userRepository.GetAllUsers();
 		}
 
-		public void Add(User user)
+		public void AddUser(User user)
 		{
 			if (UsernameExists(user.Username))
 				throw new InvalidOperationException("Username already exists!");
 
 			user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-			_userRepository.Add(user);
+			_userRepository.AddUser(user);
 		}
 
-		public void Update(User user)
+		public void UpdateUser(User user)
 		{
-			var existing = _userRepository.GetById(user.Id);
+			var existing = _userRepository.GetUserById(user.Id);
 			if (existing == null)
 				throw new ArgumentException("User not found!");
 
@@ -60,20 +60,20 @@ namespace TaskManager.BusinessLogic.Services
 			{
 				user.Password = existing.Password;
 			}
-			_userRepository.Update(user);
+			_userRepository.UpdateUser(user);
 		}
 
-		public void Delete(int id)
+		public void DeleteUser(int id)
 		{
-			var user = _userRepository.GetById(id);
+			var user = _userRepository.GetUserById(id);
 			if (user == null)
 				throw new ArgumentException("User not found!");
-			_userRepository.Delete(id);
+			_userRepository.DeleteUser(id);
 		}
 
-		public User Authenticate(string username, string password)
+		public User AuthenticateUser(string username, string password)
 		{
-			var user = _userRepository.GetByUsername(username);
+			var user = _userRepository.GetUserByUsername(username);
 			if (user == null)
 				throw new UnauthorizedAccessException("Invalid credentials!");
 
@@ -83,7 +83,7 @@ namespace TaskManager.BusinessLogic.Services
 			return user;
 		}
 
-		public void Register(string username, string password)
+		public void RegisterUser(string username, string password)
 		{
 			if (UsernameExists(username))
 				throw new InvalidOperationException("Username already exists!");
@@ -93,12 +93,12 @@ namespace TaskManager.BusinessLogic.Services
 				Username = username,
 				Password = BCrypt.Net.BCrypt.HashPassword(password)
 			};
-			_userRepository.Add(user);
+			_userRepository.AddUser(user);
 		}
 
 		public bool UsernameExists(string username)
 		{
-			return _userRepository.GetByUsername(username) != null;
+			return _userRepository.GetUserByUsername(username) != null;
 		}
 	}
 }

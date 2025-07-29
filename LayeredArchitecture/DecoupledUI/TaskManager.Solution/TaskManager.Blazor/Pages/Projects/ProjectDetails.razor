@@ -135,7 +135,7 @@
     {
         try
         {
-            await ProjectService.MarkCompletedAsync(project.Id);
+            await ProjectService.MarkProjectCompletedAsync(project.Id);
             await LoadData();
         }
         catch (Exception ex)
