@@ -12,11 +12,9 @@ namespace TaskManager.DataAccess.Repositories
 	public class UserRepository : IUserRepository
 	{
 		private readonly ApplicationDbContext _context;
-		private readonly IProjectRepository _projectRepo;
-		public UserRepository(ApplicationDbContext context, IProjectRepository projectRepo)
+		public UserRepository(ApplicationDbContext context)
 		{
 			_context = context;
-			_projectRepo = projectRepo;
         }
 
 		public User GetUserById(int id)
@@ -40,6 +38,7 @@ namespace TaskManager.DataAccess.Repositories
 			{
 				user.Username = newUser.Username;
 				user.Password = newUser.Password;
+				user.Email = newUser.Email;
 			}
 
 			_context.SaveChanges();
@@ -48,16 +47,9 @@ namespace TaskManager.DataAccess.Repositories
 		{
 			var user = _context.Users.Find(id);
 
-			var projects = _projectRepo.GetProjectsByUserId(id);
-
 			if (user != null)
 			{
 				_context.Remove(user);
-
-				foreach(var p in projects)
-				{
-					_projectRepo.DeleteProject(p.Id);
-				}
 
 				_context.SaveChanges();
 			}

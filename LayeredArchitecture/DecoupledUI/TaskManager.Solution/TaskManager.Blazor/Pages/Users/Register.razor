@@ -1,9 +1,9 @@
 ﻿@page "/register"
-@using Blazored.LocalStorage
+@using Blazored.SessionStorage
 @using TaskManager.DTO.Models
 @inject UserService UserService
 @inject NavigationManager NavigationManager
-@inject ILocalStorageService LocalStorage
+@inject ISessionStorageService SessionStorage
 
 <h3>Create a new account</h3>
 
@@ -24,6 +24,10 @@
     <div class="mb-3">
         <label>Username:</label>
         <InputText @bind-Value="registerUser.Username" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Email:</label>
+        <InputText @bind-Value="registerUser.Email" class="form-control" />
     </div>
     <div class="mb-3">
         <label>Password:</label>
@@ -51,7 +55,7 @@
                 };
 
             var loggedInUser = await UserService.LoginAsync(loginDto);
-            await LocalStorage.SetItemAsync("user", loggedInUser);
+            await SessionStorage.SetItemAsync("user", loggedInUser);
             NavigationManager.NavigateTo("/login");
         }
         catch (ApplicationException ex)

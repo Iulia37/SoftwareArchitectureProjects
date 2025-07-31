@@ -9,10 +9,12 @@ namespace TaskManager.BusinessLogic.Services
 	public class UserService : IUserService
 	{ 
 		private readonly IUserRepository _userRepository;
+		private readonly IProjectService _projectService;
 
-		public UserService(IUserRepository userRepository)
+		public UserService(IUserRepository userRepository, IProjectService projectService)
 		{
 			_userRepository = userRepository;
+			_projectService = projectService;
 		}
 
 		public User GetUserById(int id)
@@ -68,7 +70,9 @@ namespace TaskManager.BusinessLogic.Services
 			var user = _userRepository.GetUserById(id);
 			if (user == null)
 				throw new ArgumentException("User not found!");
+
 			_userRepository.DeleteUser(id);
+			_projectService.DeleteProjectsByUserId(user.Id);
 		}
 
 		public User AuthenticateUser(string username, string password)
@@ -83,7 +87,7 @@ namespace TaskManager.BusinessLogic.Services
 			return user;
 		}
 
-		public void RegisterUser(string username, string password)
+		public void RegisterUser(string username, string password, string email)
 		{
 			if (UsernameExists(username))
 				throw new InvalidOperationException("Username already exists!");
@@ -91,7 +95,8 @@ namespace TaskManager.BusinessLogic.Services
 			var user = new User
 			{
 				Username = username,
-				Password = BCrypt.Net.BCrypt.HashPassword(password)
+				Password = BCrypt.Net.BCrypt.HashPassword(password),
+				Email = email
 			};
 			_userRepository.AddUser(user);
 		}

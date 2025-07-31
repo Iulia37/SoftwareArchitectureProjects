@@ -22,7 +22,7 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                _userService.RegisterUser(registerDto.Username, registerDto.Password);
+                _userService.RegisterUser(registerDto.Username, registerDto.Password, registerDto.Email);
                 return Ok("User registered successfully.");
             }
             catch (Exception ex)
@@ -32,7 +32,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<UserDTO> Login([FromBody] UserDTO loginDto)
+        public ActionResult<UserDTO> Login([FromBody] LoginUserDTO loginDto)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace TaskManager.API.Controllers
         public IActionResult EditUser(int id, [FromBody] UserDTO userDto)
         {
             if (id != userDto.Id)
-                return BadRequest("ID mismatch.");
+                return BadRequest("ID mismatch!");
 
             try
             {

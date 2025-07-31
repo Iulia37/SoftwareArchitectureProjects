@@ -19,6 +19,8 @@ namespace TaskManager.Domain.Interfaces
 
         void DeleteProject(int id);
 
+        void DeleteProjectsByUserId(int userId);
+
         public void MarkProjectCompleted(int id);
     }
 }

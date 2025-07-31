@@ -1,0 +1,65 @@
+﻿@page "/users/show/{id:int}"
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@using TaskManager.DTO.Models
+@using System.ComponentModel.DataAnnotations
+@using Blazored.SessionStorage
+@inject ISessionStorageService SessionStorage
+
+<h3 class="mb-4">Your Account</h3>
+
+@if(user == null)
+{
+	<div>Loading...</div>
+}
+else
+{
+	<dl>
+		<dt>Username:</dt>
+		<dd>@user.Username</dd>
+		<dt>Email:</dt>
+		<dd>@user.Email</dd>
+	</dl>
+
+	<div class="d-inline-flex">
+		<button class="btn alert-info m-3" @onclick=" () => EditUser()">Edit</button>
+		<button class="btn alert-danger m-3" @onclick=" () => DeleteUser()">Delete Account</button>
+	</div>
+}
+
+@code {
+	UserDTO user;
+	[Parameter] public int id { get; set; }
+	string error;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			user = await UserService.GetUserByIdAsync(id);
+		}
+		catch(Exception ex)
+		{
+			error = ex.Message;
+		}
+	}
+
+	void EditUser()
+	{
+		NavigationManager.NavigateTo($"/users/edit/{user.Id}");
+	}
+
+	async Task DeleteUser()
+	{
+		try
+		{
+			await UserService.DeleteUserAsync(user.Id);
+			await SessionStorage.RemoveItemAsync("user");
+			NavigationManager.NavigateTo("/", true);
+		}
+		catch (Exception ex)
+		{
+			error = ex.Message;
+		}
+	}
+}

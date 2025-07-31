@@ -51,11 +51,7 @@ namespace TaskManager.DataAccess.Repositories
             if (project != null)
             {
                 _context.Projects.Remove(project);
-
-                foreach(var t in tasks)
-                {
-                    _context.TaskItems.Remove(t);
-                }
+                _context.TaskItems.RemoveRange(tasks);
 
                 _context.SaveChanges();
             }

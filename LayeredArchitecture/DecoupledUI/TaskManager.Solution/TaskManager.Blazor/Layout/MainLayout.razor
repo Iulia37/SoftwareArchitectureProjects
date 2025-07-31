@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
-@using Blazored.LocalStorage
+@using Blazored.SessionStorage
 @using TaskManager.DTO.Models
-@inject ILocalStorageService LocalStorage
+@inject ISessionStorageService SessionStorage
 @inject NavigationManager NavigationManager
 
 <div class="page">
@@ -40,12 +40,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        loggedUser = await LocalStorage.GetItemAsync<UserDTO>("user");
+        loggedUser = await SessionStorage.GetItemAsync<UserDTO>("user");
     }
 
     async Task Logout()
     {
-        await LocalStorage.RemoveItemAsync("user");
+        await SessionStorage.RemoveItemAsync("user");
         loggedUser = null;
         NavigationManager.NavigateTo("/", true);
     }

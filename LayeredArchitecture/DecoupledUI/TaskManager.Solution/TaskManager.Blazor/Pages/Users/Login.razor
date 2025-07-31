@@ -1,9 +1,9 @@
 ﻿@page "/login"
-@using Blazored.LocalStorage
+@using Blazored.SessionStorage
 @using TaskManager.DTO.Models
 @inject UserService UserService
 @inject NavigationManager NavigationManager
-@inject ILocalStorageService LocalStorage
+@inject ISessionStorageService SessionStorage
 
 <h3>Login</h3>
 
@@ -43,7 +43,7 @@
         try
         {
             var loggedUser = await UserService.LoginAsync(loginUser);
-            await LocalStorage.SetItemAsync("user", loggedUser);
+            await SessionStorage.SetItemAsync("user", loggedUser);
             NavigationManager.NavigateTo("/", true);
         }
         catch (ApplicationException ex)

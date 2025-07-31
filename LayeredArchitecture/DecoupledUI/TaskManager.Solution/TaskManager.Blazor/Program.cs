@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using TaskManager.Blazor;
@@ -13,6 +14,6 @@ builder.Services.AddScoped<ProjectService>();
 builder.Services.AddScoped<TaskService>();
 builder.Services.AddScoped<UserService>();
 
-builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredSessionStorage();
 
 await builder.Build().RunAsync();

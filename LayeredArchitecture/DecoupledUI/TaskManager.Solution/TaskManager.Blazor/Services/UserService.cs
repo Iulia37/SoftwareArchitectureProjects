@@ -47,12 +47,20 @@ public class UserService
     public async Task EditUserAsync(UserDTO user)
     {
         var response = await _http.PutAsJsonAsync($"api/users/{user.Id}", user);
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorMsg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException(errorMsg);
+        }
     }
 
     public async Task DeleteUserAsync(int id)
     {
         var response = await _http.DeleteAsync($"api/users/{id}");
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorMsg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException(errorMsg);
+        }
     }
 }

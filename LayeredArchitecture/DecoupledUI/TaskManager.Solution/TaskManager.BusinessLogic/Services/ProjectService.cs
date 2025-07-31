@@ -69,6 +69,16 @@ namespace TaskManager.BusinessLogic.Services
             _projectRepo.DeleteProject(id);
         }
 
+        public void DeleteProjectsByUserId(int userId)
+        {
+            var projects = _projectRepo.GetProjectsByUserId(userId);
+
+            foreach (var project in projects)
+            {
+                _projectRepo.DeleteProject(project.Id);
+            }
+        }
+
         public void MarkProjectCompleted(int projectId)
         {
             var project = _projectRepo.GetProjectById(projectId);

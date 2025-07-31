@@ -1,7 +1,7 @@
 ﻿@page "/projects"
 @inject ProjectService ProjectService
 @inject NavigationManager NavigationManager
-@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject Blazored.SessionStorage.ISessionStorageService SessionStorage
 @using TaskManager.DTO.Models
 
 @using TaskManager.DTO.Models
@@ -54,7 +54,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var loggedUser = await LocalStorage.GetItemAsync<UserDTO>("user");
+        var loggedUser = await SessionStorage.GetItemAsync<UserDTO>("user");
         projects = await ProjectService.GetAllProjectsForUserAsync(loggedUser.Id);
     }
 
@@ -65,7 +65,7 @@ else
 
     async Task NewProject()
     {
-        var user = await LocalStorage.GetItemAsync<UserDTO>("user");
+        var user = await SessionStorage.GetItemAsync<UserDTO>("user");
         if (user != null)
         {
             NavigationManager.NavigateTo($"/projects/create/{user.Id}");

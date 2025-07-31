@@ -1,0 +1,84 @@
+﻿@page "/users/edit/{id:int}"
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@using TaskManager.DTO.Models
+@using System.ComponentModel.DataAnnotations
+@using Blazored.SessionStorage
+@inject ISessionStorageService SessionStorage
+
+
+<h3 class="mb-4">Edit your account</h3>
+
+@if (validationMessages?.Count > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var e in validationMessages)
+        {
+            <div>@e</div>
+        }
+    </div>
+}
+
+@if(user == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <EditForm Model="@user" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <input type="hidden" @bind="user.Id"/>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Username:</label>
+            <InputText @bind-Value="user.Username" class="form-control" placeholder="Username" />
+            <ValidationMessage For="@(() => user.Username)" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Email:</label>
+            <InputText @bind-Value="user.Email" class="form-control" placeholder="Email" />
+            <ValidationMessage For="@(() => user.Email)" />
+        </div>
+        <button class="btn alert-info w-100 mt-3" type="submit">Save changes</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    List<string> validationMessages = new();
+    UserDTO user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            user = await UserService.GetUserByIdAsync(id);
+        }
+        catch (Exception ex)
+        {
+            validationMessages.Clear();
+            validationMessages.Add("User not found!");
+        }
+    }
+
+    async Task HandleValidSubmit()
+    {
+        validationMessages.Clear();
+        try
+        {
+            await UserService.EditUserAsync(user);
+            await SessionStorage.SetItemAsync("user", user);
+            NavigationManager.NavigateTo("/", true);
+        }
+        catch (ApplicationException ex)
+        {
+            validationMessages.Add(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            validationMessages.Add(ex.Message);
+        }
+    }
+}
