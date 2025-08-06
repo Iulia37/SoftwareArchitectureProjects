@@ -1,0 +1,22 @@
+<div class="create-block">
+  <div class="create-text">Create project</div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="name">
+      <label for="name">Project name:</label>
+      <input id="name" formControlName="name" />
+    </div>
+
+    <div class="description">
+      <label for="description">Description:</label>
+      <textarea id="description" formControlName="description"></textarea>
+    </div>
+
+    <div class="deadline">
+      <label for="deadline">Deadline:</label>
+      <input type="date" id="deadline" formControlName="deadline"/>
+    </div>
+
+    <button class="create-button" type="submit" [disabled]="form.invalid">Create</button>
+  </form>
+
+</div>

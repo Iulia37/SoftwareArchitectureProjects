@@ -1,0 +1,31 @@
+<div class="create-block">
+  <div class="create-text">Create task</div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="title">
+      <label for="title">Task title:</label>
+      <input id="title" formControlName="title" />
+      <div class="error" *ngIf="errorMessages['title']">
+        {{ errorMessages['title'][0] }}
+      </div>
+    </div>
+
+    <div class="description">
+      <label for="description">Description:</label>
+      <textarea id="description" formControlName="description"></textarea>
+      <div class="error" *ngIf="errorMessages['description']">
+            {{ errorMessages['description'][0] }}
+      </div>
+    </div>
+
+    <div class="deadline">
+      <label for="deadline">Deadline:</label>
+      <input type="date" id="deadline" formControlName="deadline"/>
+      <div class="error" *ngIf="errorMessages['deadline']">
+        {{ errorMessages['deadline'][0] }}
+      </div>
+    </div>
+
+    <button class="create-button" type="submit" [disabled]="form.invalid">Create</button>
+  </form>
+
+</div>

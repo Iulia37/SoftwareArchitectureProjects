@@ -1,0 +1,27 @@
+<div class="task__item"
+  appHighlightCompletedTask
+  [isCompleted]="task().isCompleted"
+>
+  <input
+    id="task-{{ task().id }}"
+    type="checkbox"
+    [checked]="task().isCompleted"
+    [disabled]="task().isCompleted"
+    (change)="this.taskChecked()"
+  />
+  <div class="task-content">
+    <div class="task-details">
+      <label for="task-{{ task().id }}" class="task-title">{{ task().title }}</label>
+      <div class="task-description">{{ task().description }}</div>
+    </div>
+    @if(!task().isCompleted)
+    {
+      <div class="task-buttons">
+        <button class="task-edit" [routerLink]="['/task', task().id, 'edit']">
+          Edit
+        </button>
+        <button class="task-delete" (click)="deleteTask(task())">Delete</button>
+      </div>
+    }
+  </div>
+</div>

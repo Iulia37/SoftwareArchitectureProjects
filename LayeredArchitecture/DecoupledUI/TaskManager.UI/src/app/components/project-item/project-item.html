@@ -1,0 +1,34 @@
+<div class="project__item card m-3">
+  <div class="card-body">
+    <h3 class="card-title">
+      <a [routerLink]="['/project', project().id]">
+        {{ project().name }}
+      </a>
+      @if(project().isCompleted)
+      {
+        <span class="badge">
+          Completed
+        </span>
+      }
+    </h3>
+
+    <div class="card-description">
+      {{ project().description | truncate:94}}
+    </div>
+
+    <div class="dates">
+      <div class="date-posted">
+        <div>Posted on</div>
+        <div class="tag-container">
+          {{ project().createdDate | date:'dd.MM.yyyy' }}
+        </div>
+      </div>
+      <div class="deadline">
+        <div>Due to</div>
+        <div class="tag-container">
+          {{ project().deadline | date:'dd.MM.yyyy' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

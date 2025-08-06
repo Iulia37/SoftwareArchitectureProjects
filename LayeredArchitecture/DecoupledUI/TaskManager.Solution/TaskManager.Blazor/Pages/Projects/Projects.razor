@@ -15,6 +15,8 @@
 else if (projects.Count == 0)
 {
     <h6>There are currently no projects. Create a new one to start working!</h6>
+
+    <button class="btn alert-secondary m-1" @onclick="() => NewProject()">Add project</button>
 }
 else
 {

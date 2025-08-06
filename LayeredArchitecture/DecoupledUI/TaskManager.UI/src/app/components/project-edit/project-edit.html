@@ -1,0 +1,22 @@
+<div class="edit-block">
+  <div class="edit-text">Edit project</div>
+  <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="name">
+      <label for="name">Project name:</label>
+      <input id="name" formControlName="name" />
+    </div>
+
+    <div class="description">
+      <label for="description">Description:</label>
+      <textarea id="description" formControlName="description"></textarea>
+    </div>
+
+    <div class="deadline">
+      <label for="deadline">Deadline:</label>
+      <input type="date" id="deadline" formControlName="deadline"/>
+    </div>
+
+    <button class="edit-button" type="submit" [disabled]="form.invalid">Save changes</button>
+  </form>
+
+</div>

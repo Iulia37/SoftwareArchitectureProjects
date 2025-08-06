@@ -37,9 +37,12 @@ namespace TaskManager.DataAccess.Repositories
 			if (user != null)
 			{
 				user.Username = newUser.Username;
-				user.Password = newUser.Password;
 				user.Email = newUser.Email;
-			}
+                if (!string.IsNullOrEmpty(newUser.Password))
+                {
+                    user.Password = newUser.Password;
+                }
+            }
 
 			_context.SaveChanges();
 		}

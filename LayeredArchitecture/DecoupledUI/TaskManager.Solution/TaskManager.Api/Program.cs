@@ -1,14 +1,39 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Nelibur.ObjectMapper;
+using System.Text;
 using TaskManager.BusinessLogic.Services;
 using TaskManager.DataAccess.Contexts;
 using TaskManager.DataAccess.Repositories;
 using TaskManager.Domain.Interfaces;
-using TaskManager.Domain.Repositories;
-using Nelibur.ObjectMapper;
 using TaskManager.Domain.Models;
+using TaskManager.Domain.Repositories;
 using TaskManager.DTO.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var jwtConfig = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtConfig["Key"]);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtConfig["Issuer"],
+            ValidAudience = jwtConfig["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+
+
+builder.Services.AddAuthorization();
 
 // Add services to the container.
 
@@ -41,15 +66,27 @@ TinyMapper.Bind<UserDTO, User>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowBlazor",
-        policy => policy.AllowAnyOrigin()
+    options.AddPolicy("AllowAngularApp",
+        policy => policy.WithOrigins("http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod());
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowBlazor");
+app.UseCors("AllowAngularApp");
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowApi",
+//        policy => policy.WithOrigins("https://localhost:7036")
+//                        .AllowAnyHeader()
+//                        .AllowAnyMethod());
+//});
+
+//var app = builder.Build();
+
+//app.UseCors("AllowApi");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -60,6 +97,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

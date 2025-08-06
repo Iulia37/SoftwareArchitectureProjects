@@ -3,9 +3,11 @@ using TaskManager.Domain.Models;
 using TaskManager.Domain.Interfaces;
 using TaskManager.DTO.Models;
 using Nelibur.ObjectMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TaskManager.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TasksController : ControllerBase

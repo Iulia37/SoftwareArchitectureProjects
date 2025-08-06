@@ -1,0 +1,87 @@
+.project__item {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1.5px 4px rgba(0,0,0,0.03);
+  border-radius: 12px;
+  background: #fff;
+  transition: box-shadow 0.2s;
+  width: 380px;
+  margin: 1rem auto;
+
+  &:hover {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 1.5px 4px rgba(0,0,0,0.06);
+  }
+
+  .card-body {
+    padding: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: "Times New Roman", Times, serif;
+    margin-bottom: 1.5rem;
+    background: #f4f8fc;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    a {
+      color: #778fec;
+      text-decoration: none;
+      &:hover { color: #95a7ef; }
+    }
+
+    .badge.bg-success {
+      font-size: 1rem;
+      font-weight: 400;
+      font-family: "Times New Roman", Times, serif;
+      background: #81e28c;
+      color: #fff;
+      padding: 0.4em 0.8em;
+      border-radius: 1em;
+      margin-left: 1rem;
+    }
+  }
+
+  .card-description {
+    margin-bottom: 2rem;
+    color: #3a3a3a;
+    font-size: 1.1rem;
+    font-family: "Times New Roman", Times, serif;
+    line-height: 1.5em;
+    height: 3em;
+  }
+
+  .dates {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .date-posted {
+      display: flex;
+      flex-direction: row;
+      gap: 0.8rem;
+      font-size: 1rem;
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    .deadline {
+      display: flex;
+      flex-direction: row;
+      gap: 0.8rem;
+      font-size: 1rem;
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    .tag-container {
+      background: #eaf2fb;
+      color: #3a3a3a;
+      font-size: 1rem;
+      padding: 0.25em 0.9em;
+      border-radius: 1em;
+      font-weight: 500;
+    }
+  }
+  
+}

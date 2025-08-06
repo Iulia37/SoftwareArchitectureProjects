@@ -1,0 +1,18 @@
+<div class="page-header">
+  <h1>Your Projects!</h1>
+  <p class="text">Select a project to see its details, make changes, or add tasks.</p>
+</div>
+
+@if (!projectItems().length) {
+<p>Loading...</p>
+}
+@else
+{
+  <div class="projects">
+    @for (project of projectItems(); track project.id) {
+      <app-project-item  
+      (projectDeleted)="deleteProjectItem(project)"
+      [project]="project" />
+    }
+  </div>
+}

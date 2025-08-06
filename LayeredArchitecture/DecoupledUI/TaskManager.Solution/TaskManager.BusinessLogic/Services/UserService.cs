@@ -47,25 +47,26 @@ namespace TaskManager.BusinessLogic.Services
 			_userRepository.AddUser(user);
 		}
 
-		public void UpdateUser(User user)
-		{
-			var existing = _userRepository.GetUserById(user.Id);
-			if (existing == null)
-				throw new ArgumentException("User not found!");
+        public void UpdateUser(User user)
+        {
+            var existing = _userRepository.GetUserById(user.Id);
+            if (existing == null)
+                throw new ArgumentException("User not found!");
 
-			if (!string.IsNullOrEmpty(user.Password) &&
-				!BCrypt.Net.BCrypt.Verify(user.Password, existing.Password))
+			if (!string.IsNullOrEmpty(user.Password))
 			{
-				user.Password= BCrypt.Net.BCrypt.HashPassword(user.Password);
+				//user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 			}
 			else
 			{
 				user.Password = existing.Password;
 			}
-			_userRepository.UpdateUser(user);
-		}
 
-		public void DeleteUser(int id)
+			_userRepository.UpdateUser(user);
+        }
+
+
+        public void DeleteUser(int id)
 		{
 			var user = _userRepository.GetUserById(id);
 			if (user == null)

@@ -1,0 +1,48 @@
+@if (project(); as proj) {
+  <div class="project">
+        <div class="title">{{ proj.name }}</div>
+        <div class="description">{{ proj.description }}</div>
+        <div class="dates">
+            <div class="date-posted">
+                <div>Posted on</div>
+                <div class="tag-container">
+                  {{ proj.createdDate | date:'dd.MM.yyyy' }}
+                </div>
+            </div>
+            <div class="deadline">
+                <div>Due to</div>
+                <div class="tag-container">
+                  {{ proj.deadline | date:'dd.MM.yyyy' }}
+                </div>
+            </div>
+        </div>
+        <div class="project-buttons">
+          @if(!proj.isCompleted)
+          {
+            <button class="edit"
+            [routerLink]="['/project', proj.id, 'edit']"
+            >Edit</button>
+
+            <button class="add-task"
+            [routerLink]="['/task/create', proj.id]"
+            >Add task</button>
+
+            <button class="complete">Complete</button>
+          }
+          <button class="delete" (click)="deleteProject(proj)">Delete</button>
+        </div>
+        <hr />
+  </div>
+  <div class="tasks">
+    <div class="task-title">Tasks for this project</div>
+    @for(task of taskItems(); track task.id)
+    {
+        <app-task-item 
+          (taskToggled)="completeTaskItem($event)" 
+          (taskDeleted)="deleteTaskItem($event)"
+          [task]="task"/>
+    }
+  </div>
+} @else {
+  <p>Loading project details...</p>
+}
