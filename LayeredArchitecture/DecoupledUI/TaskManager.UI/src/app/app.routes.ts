@@ -44,4 +44,16 @@ export const routes: Routes = [
       return import('./components/task-edit/task-edit').then((m) => m.TaskEdit);
     }
   },
+  {
+    path: 'user/login',
+    loadComponent: () => {
+      return import('./components/user-login/user-login').then((m) => m.UserLogin);
+    }
+  },
+  {
+    path: 'user/register',
+    loadComponent: () => {
+      return import('./components/user-register/user-register').then((m) => m.UserRegister);
+    }
+  }
 ];

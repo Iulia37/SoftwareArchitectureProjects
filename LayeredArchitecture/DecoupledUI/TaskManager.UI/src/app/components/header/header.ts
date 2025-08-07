@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, signal, inject } from '@angular/core';
+import { RouterLink, Router } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-header',
@@ -9,4 +10,11 @@ import { RouterLink } from '@angular/router';
 })
 export class Header {
   title = signal('TaskManager');
+  authService = inject(AuthService);
+  private router = inject(Router);
+
+  logoutUser(): void {
+    this.authService.logoutUser();
+    this.router.navigate(['/']);
+  }
 }

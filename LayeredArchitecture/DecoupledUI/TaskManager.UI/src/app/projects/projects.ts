@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProjectService } from '../services/project-service';
+import { AuthService } from '../services/auth-service';
 import { Project } from '../models/project.type';
 import { catchError } from 'rxjs';
 import { ProjectItem } from '../components/project-item/project-item';
@@ -12,11 +13,15 @@ import { ProjectItem } from '../components/project-item/project-item';
 })
 export class Projects implements OnInit {
   projectService = inject(ProjectService);
+  authService = inject(AuthService);
   projectItems = signal<Array<Project>>([]);
 
   ngOnInit(): void {
-    this.projectService
-      .getProjectsByUserId()
+    const userId = this.authService.user()?.id;
+    if(userId)
+    {
+      this.projectService
+      .getProjectsByUserId(userId.toString())
       .pipe(
         catchError((err) => {
           console.log(err);
@@ -26,6 +31,7 @@ export class Projects implements OnInit {
       .subscribe((projects) => {
         this.projectItems.set(projects);
       });
+    }
   }
 
   deleteProjectItem(projectItem: Project){

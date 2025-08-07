@@ -9,8 +9,8 @@ export class ProjectService {
   http = inject(HttpClient);
   private apiUrl = 'https://localhost:7119/api/Projects';
 
-  getProjectsByUserId = () => {
-    const url = `${this.apiUrl}/user/22`;
+  getProjectsByUserId = (id: string) => {
+    const url = `${this.apiUrl}/user/${id}`;
     return this.http.get<Array<Project>>(url);
   }
 

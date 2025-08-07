@@ -2,8 +2,15 @@
     <nav>
         <span class="appName" routerLink="/">{{ title() }}</span>
         <ul>
-            <li routerLink="/projects">Projects</li>
-            <li routerLink="/project/create">New Project</li>
+            @if(!authService.isLoggedIn()){
+                <li routerLink="/user/login">Login</li>
+                <li routerLink="/user/register">Register</li>
+            }
+            @else{
+                <li routerLink="/projects">Projects</li>
+                <li routerLink="/project/create">New Project</li>
+                <li (click)="logoutUser()">Logout</li>
+            }
         </ul>
     </nav>
 </header>

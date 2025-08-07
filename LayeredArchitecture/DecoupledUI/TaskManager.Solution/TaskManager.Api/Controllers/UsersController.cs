@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Nelibur.ObjectMapper;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.Models;
@@ -29,7 +27,7 @@ namespace TaskManager.API.Controllers
             try
             {
                 _userService.RegisterUser(registerDto.Username, registerDto.Password, registerDto.Email);
-                return Ok("User registered successfully.");
+                return Ok(new { message = "User registered successfully." });
             }
             catch (Exception ex)
             {
@@ -43,41 +41,13 @@ namespace TaskManager.API.Controllers
             try
             {
                 var authenticatedUser = _userService.AuthenticateUser(loginDto.Username, loginDto.Password);
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes("super_secret_key_12345");
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[] {
-                        new Claim(ClaimTypes.NameIdentifier, authenticatedUser.Id.ToString()),
-                        new Claim(ClaimTypes.Name, authenticatedUser.Username),
-                        new Claim(ClaimTypes.Email, authenticatedUser.Email)
-                    }),
-
-                    Expires = DateTime.UtcNow.AddHours(Convert.ToInt32(_configuration["Jwt:ExpireHours"])),
-                    Issuer = _configuration["Jwt:Issuer"],
-                    Audience = _configuration["Jwt:Audience"],
-                    SigningCredentials = new SigningCredentials(
-                        new SymmetricSecurityKey(key),
-                        SecurityAlgorithms.HmacSha256Signature
-                    )
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var jwt = tokenHandler.WriteToken(token);
-
-                return Ok(new
-                {
-                    token,
-                    user = TinyMapper.Map<UserDTO>(authenticatedUser)
-                });
+                return Ok(TinyMapper.Map<UserDTO>(authenticatedUser));
             }
             catch (Exception ex)
             {
                 return Unauthorized(ex.Message);
             }
         }
-
 
         [HttpGet]
         public ActionResult<IEnumerable<UserDTO>> GetAllUsers()
