@@ -32,4 +32,9 @@ export class ProjectService {
     const url = `${this.apiUrl}/${project.id}`;
     return this.http.delete(url);
   }
+
+  completeProject = (project: Project) => {
+    const url = `${this.apiUrl}/${project.id}/complete`;
+    return this.http.post(url, project);
+  }
 }

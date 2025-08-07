@@ -24,7 +24,7 @@ namespace TaskManager.API.Controllers
         {
             var task = _taskService.GetTaskById(id);
             if (task == null)
-                return NotFound();
+                return BadRequest();
             return Ok(TinyMapper.Map<TaskItemDTO>(task));
         }
 
@@ -76,7 +76,7 @@ namespace TaskManager.API.Controllers
         {
             var task = _taskService.GetTaskById(id);
             if (task == null)
-                return NotFound();
+                return BadRequest();
 
             _taskService.DeleteTask(id);
             return NoContent();
@@ -87,7 +87,7 @@ namespace TaskManager.API.Controllers
         {
             var task = _taskService.GetTaskById(id);
             if (task == null)
-                return NotFound();
+                return BadRequest();
 
             _taskService.MarkTaskCompleted(id);
             return NoContent();

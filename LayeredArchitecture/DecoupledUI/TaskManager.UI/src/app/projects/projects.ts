@@ -34,10 +34,4 @@ export class Projects implements OnInit {
     }
   }
 
-  deleteProjectItem(projectItem: Project){
-    this.projectItems.update((projects) => {
-      const filteredProjects = projects.filter(project => project.id != projectItem.id);
-      return filteredProjects;
-    })
-  }
 }

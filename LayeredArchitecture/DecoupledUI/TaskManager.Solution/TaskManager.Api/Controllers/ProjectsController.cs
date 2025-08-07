@@ -33,7 +33,7 @@ namespace TaskManager.API.Controllers
         {
             var project = _projectService.GetProjectById(id);
             if (project == null)
-                return NotFound();
+                return BadRequest();
             return Ok(TinyMapper.Map<ProjectDTO>(project));
         }
 
@@ -99,13 +99,13 @@ namespace TaskManager.API.Controllers
         {
             var project = _projectService.GetProjectById(id);
             if (project == null)
-                return NotFound();
+                return BadRequest();
 
             var tasks = _taskService.GetTasksByProjectId(id);
 
             if (tasks.Any(t => !t.IsCompleted))
             {
-                return BadRequest("There are still unfinished tasks!");
+                return BadRequest(new { message = "There are still unfinished tasks!" });
             }
 
             _projectService.MarkProjectCompleted(id);

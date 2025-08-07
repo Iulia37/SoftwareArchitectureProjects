@@ -5,8 +5,10 @@ import { Directive, input, effect, inject, ElementRef } from '@angular/core';
   standalone: true,
 })
 export class HighlightCompletedTask {
+  
   isCompleted = input(false);
   el = inject(ElementRef);
+
   stylesEffect = effect(() => {
     if (this.isCompleted()) {
       this.el.nativeElement.style.textDecoration = 'line-through';

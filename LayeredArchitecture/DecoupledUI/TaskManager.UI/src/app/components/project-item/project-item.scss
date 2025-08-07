@@ -27,17 +27,16 @@
     gap: 1rem;
 
     a {
-      color: #778fec;
+      color: #273158;
       text-decoration: none;
-      &:hover { color: #95a7ef; }
+      &:hover { color: #45507c; }
     }
 
-    .badge.bg-success {
+    .badge {
       font-size: 1rem;
       font-weight: 400;
       font-family: "Times New Roman", Times, serif;
-      background: #81e28c;
-      color: #fff;
+      color: #4f4b4b;
       padding: 0.4em 0.8em;
       border-radius: 1em;
       margin-left: 1rem;

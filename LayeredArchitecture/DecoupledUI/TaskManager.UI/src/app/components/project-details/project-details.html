@@ -1,5 +1,8 @@
 @if (project(); as proj) {
-  <div class="project">
+  <div class="project" 
+    appHighlightCompletedProject
+    [isCompleted]="proj.isCompleted"
+  >
         <div class="title">{{ proj.name }}</div>
         <div class="description">{{ proj.description }}</div>
         <div class="dates">
@@ -16,22 +19,22 @@
                 </div>
             </div>
         </div>
-        <div class="project-buttons">
-          @if(!proj.isCompleted)
-          {
-            <button class="edit"
-            [routerLink]="['/project', proj.id, 'edit']"
-            >Edit</button>
-
-            <button class="add-task"
-            [routerLink]="['/task/create', proj.id]"
-            >Add task</button>
-
-            <button class="complete">Complete</button>
-          }
-          <button class="delete" (click)="deleteProject(proj)">Delete</button>
-        </div>
         <hr />
+  </div>
+  <div class="project-buttons">
+    @if(!proj.isCompleted)
+    {
+      <button class="edit"
+      [routerLink]="['/project', proj.id, 'edit']"
+      >Edit</button>
+
+      <button class="add-task"
+      [routerLink]="['/task/create', proj.id]"
+      >Add task</button>
+
+      <button class="complete" (click)="completeProject(proj)">Complete</button>
+    }
+    <button class="delete" (click)="deleteProject(proj)">Delete</button>
   </div>
   <div class="tasks">
     <div class="task-title">Tasks for this project</div>

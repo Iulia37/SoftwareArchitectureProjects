@@ -7,10 +7,11 @@ import { TaskService } from '../../services/task-service';
 import { switchMap, forkJoin, of } from 'rxjs';
 import { TaskItem } from '../task-item/task-item';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
+import { HighlightCompletedProject } from '../../directives/highlight-completed-project';
 
 @Component({
   selector: 'app-project-details',
-  imports: [DatePipe, TaskItem, RouterLink],
+  imports: [DatePipe, TaskItem, RouterLink, HighlightCompletedProject],
   templateUrl: './project-details.html',
   styleUrl: './project-details.scss'
 })
@@ -19,8 +20,6 @@ export class ProjectDetails {
   private projectService = inject(ProjectService);
   private taskService = inject(TaskService);
   private router = inject(Router);
-
-  projectDeleted = output<Project>();
 
   project = signal<Project | null>(null);
   taskItems = signal<Array<Task>>([]);
@@ -77,14 +76,23 @@ export class ProjectDetails {
 
   deleteProject(project: Project) {
     this.projectService.deleteProject(project).subscribe({
-      next: (response) =>{
-        console.log(response);
-        this.projectDeleted.emit(project);
+      next: () =>{
         this.router.navigate(['/projects']);
       },
       error: (err) =>{
         console.log(err);
       }
     })
+  }
+
+  completeProject(project: Project) {
+    this.projectService.completeProject(project).subscribe({
+      next: () => {
+        this.router.navigate(['/project', project.id]);
+      },
+      error: (err) => {
+        console.error(err.error);
+      }
+    });
   }
 }

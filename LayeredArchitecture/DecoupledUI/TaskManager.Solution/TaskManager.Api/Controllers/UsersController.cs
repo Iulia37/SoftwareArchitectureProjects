@@ -61,7 +61,7 @@ namespace TaskManager.API.Controllers
         {
             var user = _userService.GetUserById(id);
             if (user == null)
-                return NotFound();
+                return BadRequest();
             return Ok(TinyMapper.Map<UserDTO>(user));
         }
 
@@ -88,7 +88,7 @@ namespace TaskManager.API.Controllers
         {
             var user = _userService.GetUserById(id);
             if (user == null)
-                return NotFound();
+                return BadRequest();
 
             try
             {

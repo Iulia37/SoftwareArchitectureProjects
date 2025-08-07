@@ -7,8 +7,8 @@
     margin: auto;
     margin-top: 30px;
     padding: 16px;
-    background-color: #faf4f4;
-    border: 1px solid #d6d4d4;
+    background: #4003a8;
+    background: linear-gradient(90deg, rgba(64, 3, 168, 1) 0%, rgba(121, 96, 191, 1) 100%);
     border-radius: 12px;
 
     form {
@@ -30,15 +30,16 @@
     }
 
     .create-button {
-        background-color: rgb(223, 238, 244);
+        background-color: rgb(187, 184, 246);
         width: 30%;
+        color: rgb(35, 34, 34);
         height: 30px;
         border: none;
         border-radius: 10px;
         cursor: pointer;
 
         &:hover {
-            background-color: rgb(201, 231, 243);
+            background-color: rgb(214, 212, 244);
         }
     }
 }
