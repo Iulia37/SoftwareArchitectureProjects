@@ -1,18 +1,23 @@
-<div class="register-container">
-    <h3>Register</h3>
+<div class="form-container">
+    <h3 class="form-title">Register</h3>
+
+    <div class="error-message" *ngIf="errors">
+        {{ errors }}
+    </div>
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="username">
+        <div class="form-field">
             <label for="username">Username:</label>
             <input id="username" formControlName="username" required>
         </div>
-        <div class="email">
+        <div class="form-field">
             <label for="email">Email:</label>
             <input id="email" formControlName="email" required>
         </div>
-        <div class="password">
+        <div class="form-field">
             <label for="password">Password:</label>
             <input id="password" formControlName="password" type="password">
         </div>
-        <button type="submit">Register</button>
+        <button class="form-button" type="submit">Register</button>
     </form>
 </div>

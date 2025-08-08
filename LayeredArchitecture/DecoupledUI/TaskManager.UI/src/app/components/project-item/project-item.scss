@@ -19,7 +19,7 @@
     font-weight: 700;
     font-family: "Times New Roman", Times, serif;
     margin-bottom: 1.5rem;
-    background: #f4f8fc;
+    background: #e2e8ee;
     border-radius: 8px;
     padding: 1rem 1.5rem;
     display: flex;
@@ -27,16 +27,16 @@
     gap: 1rem;
 
     a {
-      color: #273158;
+      color: #212845;
       text-decoration: none;
-      &:hover { color: #45507c; }
+      &:hover { color: #49547e; }
     }
 
     .badge {
       font-size: 1rem;
       font-weight: 400;
       font-family: "Times New Roman", Times, serif;
-      color: #4f4b4b;
+      color: #413f3f;
       padding: 0.4em 0.8em;
       border-radius: 1em;
       margin-left: 1rem;
@@ -45,7 +45,6 @@
 
   .card-description {
     margin-bottom: 2rem;
-    color: #3a3a3a;
     font-size: 1.1rem;
     font-family: "Times New Roman", Times, serif;
     line-height: 1.5em;
@@ -75,7 +74,6 @@
 
     .tag-container {
       background: #eaf2fb;
-      color: #3a3a3a;
       font-size: 1rem;
       padding: 0.25em 0.9em;
       border-radius: 1em;

@@ -1,1 +1,67 @@
-<p>home works!</p>
+<div class="dashboard-container" *ngIf="isLoggedIn()">
+  <div *ngIf="totalProjects() != 0">
+  <section class="welcome-section">
+    <h1>{{ welcomeMessage() }}</h1>
+    <p>Here's an overview of your productivity today</p>
+  </section>
+
+  <section class="stats-grid">
+    <div class="stat-card projects">
+      <div class="stat-icon">📁</div>
+      <div class="stat-content">
+        <h3>{{ totalProjects() }}</h3>
+        <p>Total Projects</p>
+        <small>{{ activeProjects() }} active, {{ completedProjects() }} completed</small>
+      </div>
+    </div>
+
+    <div class="stat-card tasks">
+      <div class="stat-icon">✅</div>
+      <div class="stat-content">
+        <h3>{{ completedTasks() }}</h3>
+        <p>Tasks Completed</p>
+        <small>{{ pendingTasks() }} remaining</small>
+      </div>
+    </div>
+
+    <div class="stat-card deadlines">
+      <div class="stat-icon">⏰</div>
+      <div class="stat-content">
+        <h3>{{ upcomingDeadlines() }}</h3>
+        <p>Upcoming Deadlines</p>
+        <small>Next 7 days</small>
+      </div>
+    </div>
+
+    <div class="stat-card progress">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <h3>{{ totalTasks() > 0 ? ((completedTasks() / totalTasks()) * 100).toFixed(0) : 0 }}%</h3>
+        <p>Overall Progress</p>
+        <small>{{ completedTasks() }}/{{ totalTasks() }} tasks done</small>
+      </div>
+    </div>
+  </section>
+  
+</div>
+  <section class="empty-state" *ngIf="totalProjects() === 0">
+    <div class="empty-content">
+      <div class="empty-icon">🚀</div>
+      <h2>Welcome to TaskManager!</h2>
+      <p>You don't have any projects yet. Create your first project to get started.</p>
+      <a routerLink="/project/create" class="cta-button">Create Your First Project</a>
+    </div>
+  </section>
+</div>
+
+<div class="logout-state" *ngIf="!isLoggedIn()">
+  <div class="logout-content">
+      <div class="logout-icon">🚀</div>
+      <h2>Welcome to TaskManager!</h2>
+      <p>Sign up to start your first project or login if you already have an account.</p>
+      <div class="log-buttons">
+        <a routerLink="/user/register" class="log-button">Sign up</a>
+        <a routerLink="/user/login" class="log-button">Login</a>
+      </div>
+  </div>
+</div>

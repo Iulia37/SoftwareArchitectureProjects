@@ -88,7 +88,7 @@ export class ProjectDetails {
   completeProject(project: Project) {
     this.projectService.completeProject(project).subscribe({
       next: () => {
-        this.router.navigate(['/project', project.id]);
+        this.project.set({ ...project, isCompleted: true });
       },
       error: (err) => {
         console.error(err.error);

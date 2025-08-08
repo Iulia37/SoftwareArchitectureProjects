@@ -1,22 +1,27 @@
-<div class="edit-block">
+<div class="form-container">
   <div class="edit-text">Edit task</div>
+
+  <div class="error-message" *ngIf="errors">
+    {{ errors }}
+  </div>
+
   <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="title">
+    <div class="form-field">
       <label for="title">Title:</label>
       <input id="title" formControlName="title" />
     </div>
 
-    <div class="description">
+    <div class="form-field">
       <label for="description">Description:</label>
       <textarea id="description" formControlName="description"></textarea>
     </div>
 
-    <div class="deadline">
+    <div class="form-field">
       <label for="deadline">Deadline:</label>
       <input type="date" id="deadline" formControlName="deadline"/>
     </div>
 
-    <button class="edit-button" type="submit" [disabled]="form.invalid">Save changes</button>
+    <button class="form-button" type="submit" [disabled]="form.invalid">Save changes</button>
   </form>
 
 </div>

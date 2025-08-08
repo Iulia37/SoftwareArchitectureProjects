@@ -11,6 +11,7 @@ export class HighlightCompletedProject {
   stylesEffect = effect(() => {
     if(this.isCompleted())
     {
+      this.ef.nativeElement.style.color = 'grey';
       this.ef.nativeElement.style.filter = 'grayscale(0.7)';
       const badge = document.createElement('span');
       badge.textContent = '✔ Completed';

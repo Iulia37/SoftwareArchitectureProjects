@@ -20,7 +20,7 @@ export class TaskCreate implements OnInit {
   form!: FormGroup;
   projectId!: string | null;
 
-  errorMessages: { [key: string]: string[] } = {};
+  errors: string = '';
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id');
@@ -46,8 +46,13 @@ export class TaskCreate implements OnInit {
           this.router.navigate(['/project', this.projectId]);
         },
         error: (err) => {
+          this.errors = '';
           if(err.error.errors) {
-            this.errorMessages = err.error.errors;
+            Object.keys(err.error.errors).forEach((field) => {
+              this.errors = err.error.errors[field][0];
+            })
+          } else if(typeof err.error == 'string'){
+            this.errors = err.error;
           }
         }
       });

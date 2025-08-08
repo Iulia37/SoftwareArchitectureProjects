@@ -24,6 +24,8 @@ export class TaskEdit implements OnInit {
   form!: FormGroup;
   originalTask: Task | null = null;
 
+  errors: string = '';
+
   ngOnInit() {
     this.route.paramMap.pipe(
       switchMap(params => {
@@ -65,11 +67,19 @@ export class TaskEdit implements OnInit {
       };
 
       this.taskService.updateTask(updatedTask).subscribe({
-        next: (response) => {
+        next: () => {
           this.router.navigate(['/project', this.originalTask?.projectId]);
         },
         error: (err) => {
-          console.error(err);
+          this.errors = '';
+          if(err.error.errors)
+          {
+            Object.keys(err.error.errors).forEach((field) => {
+              this.errors = err.error.errors[field][0]; 
+            })
+          } else if( typeof err.error == 'string'){
+              this.errors = err.error;
+          }
         }
       });
     }

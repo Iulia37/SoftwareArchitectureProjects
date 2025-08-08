@@ -20,6 +20,7 @@ export class ProjectEdit implements OnInit{
 
   form!: FormGroup;
   originalProject: Project | null = null;
+  errors: string = '';
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
@@ -63,11 +64,20 @@ export class ProjectEdit implements OnInit{
         };
   
         this.projectService.updateProject(updatedProject).subscribe({
-          next: (response) => {
+          next: () => {
             this.router.navigate(['/project', this.originalProject?.id]);
           },
           error: (err) => {
-            console.error(err);
+            this.errors = '';
+            if(err.error.errors)
+            {
+              Object.keys(err.error.errors).forEach((field) => {
+                this.errors = err.error.errors[field][0];
+              })
+            }
+            else if(typeof err.error == 'string'){
+              this.errors = err.error;
+            }
           }
         });
       }

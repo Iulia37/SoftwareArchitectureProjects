@@ -3,6 +3,7 @@ import { loginUser } from '../models/login-user.type';
 import { User } from '../models/user.type';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { tap } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = 'https://localhost:7119/api/Users';
+  private router = inject(Router);
 
   private userKey = 'user_key';
   private _user = signal<User | null>(this.getUserFromStorage());
@@ -29,6 +31,7 @@ export class AuthService {
   logoutUser(){
     localStorage.removeItem(this.userKey);
     this._user.set(null);
+    this.router.navigate(["/"]);
   }
 
   private getUserFromStorage(): User | null {

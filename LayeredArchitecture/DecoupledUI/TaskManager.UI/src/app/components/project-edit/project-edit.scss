@@ -1,44 +1,44 @@
-.edit-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    width: 50%;
-    margin: auto;
-    margin-top: 30px;
-    padding: 16px;
-    background-color: #faf4f4;
-    border: 1px solid #d6d4d4;
-    border-radius: 12px;
+// .edit-block {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     gap: 15px;
+//     width: 50%;
+//     margin: auto;
+//     margin-top: 30px;
+//     padding: 16px;
+//     background: #a0ebeb;
+//     background: linear-gradient(90deg, rgba(160, 235, 235, 1) 0%, rgba(218, 243, 245, 1) 100%);
+//     border-radius: 12px;
 
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        width: 60%;
-    }
+//     form {
+//         display: flex;
+//         flex-direction: column;
+//         gap: 15px;
+//         width: 60%;
+//     }
 
-    .edit-text {
-        font-size: 30px;
-        font-weight: 500;
-    }
+//     .edit-text {
+//         font-size: 30px;
+//         font-weight: 500;
+//     }
 
-    .name, .description, .deadline {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
+//     .name, .description, .deadline {
+//         display: flex;
+//         flex-direction: column;
+//         gap: 5px;
+//     }
 
-    .edit-button {
-        background-color: rgb(223, 238, 244);
-        width: 30%;
-        height: 30px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
+//     .edit-button {
+//         background-color: rgb(223, 238, 244);
+//         width: 30%;
+//         height: 30px;
+//         border: none;
+//         border-radius: 10px;
+//         cursor: pointer;
 
-        &:hover {
-            background-color: rgb(201, 231, 243);
-        }
-    }
-}
+//         &:hover {
+//             background-color: rgb(201, 231, 243);
+//         }
+//     }
+// }

@@ -18,6 +18,8 @@ export class UserLogin {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  errors: string = '';
+
   form: FormGroup = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -27,12 +29,19 @@ export class UserLogin {
     if(this.form.valid){
       const user: loginUser = this.form.value;
       this.authService.loginUser(user).subscribe({
-        next: (response) => {
-          console.log(response);
+        next: () => {
           this.router.navigate(['/']);
         },
         error: (err) => {
-          console.log(err.error);
+          this.errors = '';
+          
+          if(err.error.errors){
+            Object.keys(err.error.errors).forEach((field) => {
+              this.errors = err.error.errors[field][0];
+            })
+          } else if(typeof err.error == 'string'){
+            this.errors = err.error;
+          }
         }
       });
     }
