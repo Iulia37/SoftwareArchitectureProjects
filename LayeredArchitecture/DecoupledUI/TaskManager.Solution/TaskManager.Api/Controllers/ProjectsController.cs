@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nelibur.ObjectMapper;
+using System.Security.Claims;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.Models;
 using TaskManager.DTO.Models;
 
 namespace TaskManager.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProjectsController : ControllerBase
@@ -31,10 +32,17 @@ namespace TaskManager.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<ProjectDTO> GetProjectById(int id)
         {
-            var project = _projectService.GetProjectById(id);
-            if (project == null)
-                return BadRequest();
-            return Ok(TinyMapper.Map<ProjectDTO>(project));
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            try
+            {
+                var project = _projectService.GetProjectById(id, currentUserId);
+                return Ok(TinyMapper.Map<ProjectDTO>(project));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}/tasks")]
@@ -97,7 +105,8 @@ namespace TaskManager.API.Controllers
         [HttpPost("{id}/complete")]
         public IActionResult MarkProjectCompleted(int id)
         {
-            var project = _projectService.GetProjectById(id);
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var project = _projectService.GetProjectById(id, currentUserId);
             if (project == null)
                 return BadRequest();
 

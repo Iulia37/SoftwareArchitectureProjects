@@ -11,7 +11,7 @@ namespace TaskManager.Domain.Interfaces
     {
         IEnumerable<Project> GetProjectsByUserId(int userId);
 
-        Project GetProjectById(int id);
+        Project GetProjectById(int id, int userId);
 
         void AddProject(Project project);
 

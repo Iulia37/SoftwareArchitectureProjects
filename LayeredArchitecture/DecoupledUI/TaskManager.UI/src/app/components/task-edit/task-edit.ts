@@ -35,9 +35,14 @@ export class TaskEdit implements OnInit {
         }
         return of(null);
       })
-    ).subscribe((task) => {
-      this.originalTask = task;
-      this.initForm(task);
+    ).subscribe({
+      next: (task) => {
+        this.originalTask = task;
+        this.initForm(task);
+      },
+      error: (err) => {
+        this.router.navigate(['/error'], { state: { error: err} });
+      }
     });
   }
 

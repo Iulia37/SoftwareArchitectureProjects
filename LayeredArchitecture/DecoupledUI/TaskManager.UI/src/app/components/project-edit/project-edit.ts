@@ -32,10 +32,15 @@ export class ProjectEdit implements OnInit{
         }
         return of(null);
       })
-    ).subscribe((project) => {
-      this.originalProject = project;
-      this.initForm(project);
-    })
+    ).subscribe({
+      next: (project) => {
+        this.originalProject = project;
+        this.initForm(project);
+      },
+      error: (err) => {
+        this.router.navigate(['/error'], { state: { error: err} });
+      }
+    });
   }
 
   initForm(project: Project | null){

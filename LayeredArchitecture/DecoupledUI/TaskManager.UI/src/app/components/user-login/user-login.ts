@@ -27,14 +27,15 @@ export class UserLogin {
 
   onSubmit() {
     if(this.form.valid){
+
       const user: loginUser = this.form.value;
+      
       this.authService.loginUser(user).subscribe({
         next: () => {
-          this.router.navigate(['/']);
+          this.router.navigate(["/"]);
         },
         error: (err) => {
           this.errors = '';
-          
           if(err.error.errors){
             Object.keys(err.error.errors).forEach((field) => {
               this.errors = err.error.errors[field][0];

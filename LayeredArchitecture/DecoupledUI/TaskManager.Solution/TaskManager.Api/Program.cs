@@ -24,6 +24,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AppSettings:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+            ValidateIssuerSigningKey = true
+        };
+    });
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 
@@ -41,6 +59,12 @@ TinyMapper.Bind<TaskItemDTO, TaskItem>();
 
 TinyMapper.Bind<User, UserDTO>();
 TinyMapper.Bind<UserDTO, User>();
+
+TinyMapper.Bind<User, LoginUserDTO>();
+TinyMapper.Bind<LoginUserDTO, User>();
+
+TinyMapper.Bind<User, RegisterUserDTO>();
+TinyMapper.Bind<RegisterUserDTO, User>();
 
 builder.Services.AddCors(options =>
 {
@@ -75,6 +99,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

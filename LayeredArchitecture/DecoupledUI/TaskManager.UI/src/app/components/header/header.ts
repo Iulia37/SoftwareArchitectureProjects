@@ -1,5 +1,5 @@
 import { Component, signal, inject } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 
 @Component({
@@ -11,10 +11,8 @@ import { AuthService } from '../../services/auth-service';
 export class Header {
   title = signal('TaskManager');
   authService = inject(AuthService);
-  private router = inject(Router);
 
   logoutUser(): void {
     this.authService.logoutUser();
-    this.router.navigate(['/']);
   }
 }

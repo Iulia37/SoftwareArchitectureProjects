@@ -1,7 +1,8 @@
-﻿using TaskManager.Domain.Models;
-using TaskManager.Domain.Repositories;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using TaskManager.Domain.Interfaces;
-using System.Collections.Generic;
+using TaskManager.Domain.Models;
+using TaskManager.Domain.Repositories;
 
 namespace TaskManager.BusinessLogic.Services
 {
@@ -21,9 +22,21 @@ namespace TaskManager.BusinessLogic.Services
             return _taskRepo.GetTasksByProjectId(projectId);
         }
 
-        public TaskItem GetTaskById(int id)
+        public TaskItem GetTaskById(int id, int currentUserId)
         {
-            return _taskRepo.GetTaskById(id);
+            var task = _taskRepo.GetTaskById(id);
+
+            if (task == null)
+                throw new ArgumentException("Task not found!");
+
+            var project = _projectRepo.GetProjectById(task.ProjectId);
+
+            if(project.UserId != currentUserId)
+            {
+                throw new UnauthorizedAccessException("You cannot access this task!");
+            }
+
+            return task;
         }
 
         public void AddTask(TaskItem task)
@@ -48,6 +61,7 @@ namespace TaskManager.BusinessLogic.Services
         public void UpdateTask(TaskItem updatedTask)
         {
             var task = _taskRepo.GetTaskById(updatedTask.Id);
+
             if (task == null)
                 throw new ArgumentException("There is no task with that id");
 
@@ -60,7 +74,6 @@ namespace TaskManager.BusinessLogic.Services
 
             if (task.Deadline > project.Deadline)
                 throw new ArgumentException("Task deadline cannot be after project's deadline!");
-
 
             task.Title = updatedTask.Title;
             task.Description = updatedTask.Description;

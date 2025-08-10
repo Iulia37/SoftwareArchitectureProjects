@@ -4,10 +4,11 @@ using TaskManager.Domain.Interfaces;
 using TaskManager.DTO.Models;
 using Nelibur.ObjectMapper;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace TaskManager.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TasksController : ControllerBase
@@ -22,10 +23,16 @@ namespace TaskManager.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<TaskItemDTO> GetTaskById(int id)
         {
-            var task = _taskService.GetTaskById(id);
-            if (task == null)
-                return BadRequest();
-            return Ok(TinyMapper.Map<TaskItemDTO>(task));
+            try 
+            {
+                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var task = _taskService.GetTaskById(id, currentUserId);
+                return Ok(TinyMapper.Map<TaskItemDTO>(task));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("project/{projectId}")]
@@ -74,7 +81,8 @@ namespace TaskManager.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(int id)
         {
-            var task = _taskService.GetTaskById(id);
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var task = _taskService.GetTaskById(id, currentUserId);
             if (task == null)
                 return BadRequest();
 
@@ -85,7 +93,8 @@ namespace TaskManager.API.Controllers
         [HttpPost("{id}/complete")]
         public IActionResult MarkTaskCompleted(int id)
         {
-            var task = _taskService.GetTaskById(id);
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var task = _taskService.GetTaskById(id, currentUserId);
             if (task == null)
                 return BadRequest();
 

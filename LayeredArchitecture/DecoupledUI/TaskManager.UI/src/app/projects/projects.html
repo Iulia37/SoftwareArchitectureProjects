@@ -3,10 +3,7 @@
   <p class="text">Select a project to see its details, make changes, or add tasks.</p>
 </div>
 
-@if (!projectItems().length) {
-<p>Loading...</p>
-}
-@else
+@if(projectItems().length > 0)
 {
   <div class="projects">
     @for (project of projectItems(); track project.id) {
@@ -14,4 +11,7 @@
       [project]="project" />
     }
   </div>
+}
+@else {
+  <p class="no-projects">You don't have any projects yet.</p>
 }

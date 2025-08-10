@@ -22,9 +22,19 @@ namespace TaskManager.BusinessLogic.Services
             return _projectRepo.GetProjectsByUserId(userId);
         }
 
-        public Project GetProjectById(int id)
+        public Project GetProjectById(int id, int currentUserId)
         {
-            return _projectRepo.GetProjectById(id);
+            Project project = _projectRepo.GetProjectById(id);
+
+            if (project == null)
+                throw new ArgumentException("Project not found!");
+
+            if (project.UserId != currentUserId)
+            {
+                throw new UnauthorizedAccessException("You cannot access this project!");
+            }
+
+            return project;
         }
 
         public void AddProject(Project project)

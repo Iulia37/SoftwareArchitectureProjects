@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Project } from '../models/project.type';
 import { HttpClient } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,11 @@ export class ProjectService {
 
   getProjectById = (id: string) => {
     const url = `${this.apiUrl}/${id}`;
-    return this.http.get<Project>(url);
+    return this.http.get<Project>(url).pipe(
+      catchError((error) => {
+        return throwError(() => error.error);
+      })
+    );
   }
 
   updateProject = (project: Project) => {

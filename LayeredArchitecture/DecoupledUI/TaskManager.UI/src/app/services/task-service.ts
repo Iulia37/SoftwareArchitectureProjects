@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Task } from '../models/task.type';
 import { HttpClient } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,12 @@ export class TaskService {
   getTaskById = (id: string) =>
   {
     const url = `${this.apiUrl}/${id}`;
-    return this.http.get<Task>(url);
+    return this.http.get<Task>(url).pipe(
+      catchError((error) => {
+        console.log(error);
+        return throwError(() => error.error);
+      })
+    );
   }
 
   markTaskCompleted = (task: Task) => {

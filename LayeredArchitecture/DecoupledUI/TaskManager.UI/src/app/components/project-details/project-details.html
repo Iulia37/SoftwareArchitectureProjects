@@ -26,7 +26,7 @@
     {
       <button class="edit"
       [routerLink]="['/project', proj.id, 'edit']"
-      >Edit</button>
+      >Edit Project</button>
 
       <button class="add-task"
       [routerLink]="['/task/create', proj.id]"
@@ -34,18 +34,37 @@
 
       <button class="complete" (click)="completeProject(proj)">Complete</button>
     }
-    <button class="delete" (click)="deleteProject(proj)">Delete</button>
+    <button class="delete" (click)="deleteProject(proj)">Delete Project</button>
   </div>
-  <div class="tasks">
-    <div class="task-title">Tasks for this project:</div>
-    @for(task of taskItems(); track task.id)
-    {
-        <app-task-item 
-          (taskToggled)="completeTaskItem($event)" 
-          (taskDeleted)="deleteTaskItem($event)"
-          [task]="task"/>
-    }
+  <div class="tasks-container" *ngIf="taskItems().length > 0">
+    <div class="tasks-title">Tasks for this project</div>
+    <div class="tasks">
+      <div class="ongoing-tasks">
+      <div class="title">Ongoing tasks:</div>
+        <div *ngIf="getOngoingTasks().length > 0">
+          @for(task of getOngoingTasks(); track task.id)
+          {
+            <app-task-item 
+            (taskToggled)="completeTaskItem($event)" 
+            (taskDeleted)="deleteTaskItem($event)"
+            [task]="task"/>
+          }
+        </div>
+        <div class="all-completed" *ngIf="getOngoingTasks().length == 0">
+          You've succesfully completed all your tasks!
+        </div>
+      </div>
+      <div class="completed-tasks">
+        <div class="title">Completed tasks:</div>
+        @for(task of getCompletedTasks(); track task.id)
+        {
+            <app-task-item 
+            [task]="task"/>
+        }
+      </div>
+    </div>
   </div>
-} @else {
-  <p>Loading project details...</p>
+  <div class="no-tasks" *ngIf="taskItems().length == 0">
+    <div>There are no tasks for this project yet.</div>
+  </div>
 }

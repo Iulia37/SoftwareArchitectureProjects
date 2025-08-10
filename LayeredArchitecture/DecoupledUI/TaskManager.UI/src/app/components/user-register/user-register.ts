@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { registerUser } from '../../models/register-user.type';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user-service';
+import { AuthService } from '../../services/auth-service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class UserRegister {
   private router = inject(Router);
-  private userService = inject(UserService);
+  private authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
   errors: string = '';
@@ -28,7 +28,7 @@ export class UserRegister {
     if(this.form.valid)
     {
       const newUser: registerUser = this.form.value;
-      this.userService.registerUser(newUser).subscribe({
+      this.authService.registerUser(newUser).subscribe({
         next: () => {
           this.router.navigate(['/user/login']);
         },

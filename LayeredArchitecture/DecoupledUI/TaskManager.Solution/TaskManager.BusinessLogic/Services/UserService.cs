@@ -76,32 +76,6 @@ namespace TaskManager.BusinessLogic.Services
 			_projectService.DeleteProjectsByUserId(user.Id);
 		}
 
-		public User AuthenticateUser(string username, string password)
-		{
-			var user = _userRepository.GetUserByUsername(username);
-			if (user == null)
-				throw new UnauthorizedAccessException("Invalid credentials!");
-
-			if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
-				throw new UnauthorizedAccessException("Invalid credentials!");
-
-			return user;
-		}
-
-		public void RegisterUser(string username, string password, string email)
-		{
-			if (UsernameExists(username))
-				throw new InvalidOperationException("Username already exists!");
-
-			var user = new User
-			{
-				Username = username,
-				Password = BCrypt.Net.BCrypt.HashPassword(password),
-				Email = email
-			};
-			_userRepository.AddUser(user);
-		}
-
 		public bool UsernameExists(string username)
 		{
 			return _userRepository.GetUserByUsername(username) != null;

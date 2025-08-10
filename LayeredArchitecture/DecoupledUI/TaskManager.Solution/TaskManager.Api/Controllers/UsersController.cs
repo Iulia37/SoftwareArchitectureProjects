@@ -5,9 +5,11 @@ using System.Text;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.Models;
 using TaskManager.DTO.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TaskManager.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
@@ -20,35 +22,8 @@ namespace TaskManager.API.Controllers
             _userService = userService;
             _configuration = configuration;
         }
-
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterUserDTO registerDto)
-        {
-            try
-            {
-                _userService.RegisterUser(registerDto.Username, registerDto.Password, registerDto.Email);
-                return Ok(new { message = "User registered successfully." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("login")]
-        public ActionResult Login([FromBody] LoginUserDTO loginDto)
-        {
-            try
-            {
-                var authenticatedUser = _userService.AuthenticateUser(loginDto.Username, loginDto.Password);
-                return Ok(TinyMapper.Map<UserDTO>(authenticatedUser));
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(ex.Message);
-            }
-        }
-
+       
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<UserDTO>> GetAllUsers()
         {
@@ -56,6 +31,7 @@ namespace TaskManager.API.Controllers
             return Ok(users.Select(u => TinyMapper.Map<UserDTO>(u)));
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public ActionResult<UserDTO> GetUserById(int id)
         {
@@ -65,6 +41,7 @@ namespace TaskManager.API.Controllers
             return Ok(TinyMapper.Map<UserDTO>(user));
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult EditUser(int id, [FromBody] UserDTO userDto)
         {
@@ -83,6 +60,7 @@ namespace TaskManager.API.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {

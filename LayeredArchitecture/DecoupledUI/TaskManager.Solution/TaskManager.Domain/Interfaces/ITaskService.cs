@@ -11,7 +11,7 @@ namespace TaskManager.Domain.Interfaces
     {
         IEnumerable<TaskItem> GetTasksByProjectId(int projectId);
 
-        TaskItem GetTaskById(int id);
+        TaskItem GetTaskById(int id, int currentUserId);
 
         void AddTask(TaskItem task);
 

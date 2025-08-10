@@ -1,17 +1,17 @@
 import { Component, inject, signal, output } from '@angular/core';
 import { Project } from '../../models/project.type';
 import { Task } from '../../models/task.type';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { ProjectService } from '../../services/project-service';
 import { TaskService } from '../../services/task-service';
-import { switchMap, forkJoin, of } from 'rxjs';
+import { switchMap, forkJoin, of, catchError } from 'rxjs';
 import { TaskItem } from '../task-item/task-item';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { HighlightCompletedProject } from '../../directives/highlight-completed-project';
 
 @Component({
   selector: 'app-project-details',
-  imports: [DatePipe, TaskItem, RouterLink, HighlightCompletedProject],
+  imports: [DatePipe, TaskItem, RouterLink, HighlightCompletedProject, CommonModule],
   templateUrl: './project-details.html',
   styleUrl: './project-details.scss'
 })
@@ -36,9 +36,14 @@ export class ProjectDetails {
       }
       return of({ project: null, tasks: [] });
     })
-    ).subscribe(({ project, tasks }) => {
-      this.project.set(project);
-      this.taskItems.set(tasks);
+    ).subscribe({
+      next: ({ project, tasks }) => {
+        this.project.set(project);
+        this.taskItems.set(tasks);
+      },
+      error: (err) => {
+        this.router.navigate(['/error'], { state: { error: err} });
+      }
     });
   }
 
@@ -94,5 +99,13 @@ export class ProjectDetails {
         console.error(err.error);
       }
     });
+  }
+
+  getOngoingTasks() {
+    return this.taskItems().filter(task => !task.isCompleted);
+  }
+
+  getCompletedTasks() {
+    return this.taskItems().filter(task => task.isCompleted);
   }
 }

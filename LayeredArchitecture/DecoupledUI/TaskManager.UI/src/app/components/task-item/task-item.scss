@@ -8,6 +8,7 @@
   margin-bottom: 12px;
   background-color: #fff;
   transition: background-color 0.2s ease;
+  width: 500px;
 
   &:hover {
     background-color: #f8f9fa;
@@ -69,13 +70,13 @@
     .task-edit, .task-delete {
         cursor: pointer;
         border: none;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 3px 4px rgba(0,0,0,0.2);
         border-radius: 5px;
         padding: 10px 15px;
     }
 
     .task-edit {
-        background-color: rgb(170, 177, 239);
+        border: 2px solid rgb(63, 80, 230);
 
         &:hover {
           background-color: rgb(156, 165, 240);
@@ -83,7 +84,7 @@
     }
 
     .task-delete {
-        background-color: rgb(241, 103, 101);
+        border: 2px solid rgb(241, 62, 59);
 
         &:hover {
           background-color: rgb(243, 86, 84);
