@@ -1,13 +1,7 @@
 <div class="project__item card m-3">
   <div class="card-body" [routerLink]="['/project', project().id]">
     <h3 class="card-title">
-      <div> {{ project().name }} </div>
-      @if(project().isCompleted)
-      {
-        <span class="badge">
-          ✔ Completed
-        </span>
-      }
+      {{ project().name }}
     </h3>
 
     <div class="card-description">
@@ -29,4 +23,7 @@
       </div>
     </div>
   </div>
+  <span class="badge" *ngIf="project().isCompleted">
+    COMPLETED
+  </span>
 </div>

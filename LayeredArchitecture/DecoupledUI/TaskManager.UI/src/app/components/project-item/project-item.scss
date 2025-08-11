@@ -4,9 +4,10 @@
   background: #fff;
   transition: box-shadow 0.2s;
   width: 380px;
-  margin: 1rem auto;
+  height: 100%;
   transition: 0.2s;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 1.5px 4px rgba(0,0,0,0.06);
@@ -14,6 +15,9 @@
   }
 
   .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 0.5rem;
   }
 
@@ -25,24 +29,11 @@
     background: #e2e8ee;
     border-radius: 8px;
     padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
 
     a {
       color: #212845;
       text-decoration: none;
       &:hover { color: #49547e; }
-    }
-
-    .badge {
-      font-size: 1rem;
-      font-weight: 400;
-      font-family: "Times New Roman", Times, serif;
-      color: #413f3f;
-      padding: 0.4em 0.8em;
-      border-radius: 1em;
-      margin-left: 1rem;
     }
   }
 
@@ -84,4 +75,16 @@
     }
   }
   
+  .badge {
+    position: absolute;
+    top: 100px;
+    right: 10px; 
+    font-size: 3.6rem;
+    -webkit-text-stroke: 2px #34a432; 
+    background-color: rgba(70, 220, 122, 0.5);
+    color: white;
+    border: 2px solid rgb(17, 120, 17);
+    border-radius: 12px;
+    transform: rotate(-20deg);
+  }
 }

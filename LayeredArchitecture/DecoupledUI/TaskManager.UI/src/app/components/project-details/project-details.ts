@@ -20,6 +20,7 @@ export class ProjectDetails {
   private projectService = inject(ProjectService);
   private taskService = inject(TaskService);
   private router = inject(Router);
+  completeProjectError: string = '';
 
   project = signal<Project | null>(null);
   taskItems = signal<Array<Task>>([]);
@@ -85,18 +86,19 @@ export class ProjectDetails {
         this.router.navigate(['/projects']);
       },
       error: (err) =>{
-        console.log(err);
+        this.completeProjectError = err.error.message;
       }
     })
   }
 
   completeProject(project: Project) {
+    this.completeProjectError = '';
     this.projectService.completeProject(project).subscribe({
       next: () => {
         this.project.set({ ...project, isCompleted: true });
       },
       error: (err) => {
-        console.error(err.error);
+        this.completeProjectError = err.error.message;
       }
     });
   }

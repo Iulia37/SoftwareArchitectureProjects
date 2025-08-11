@@ -3,6 +3,9 @@
     appHighlightCompletedProject
     [isCompleted]="proj.isCompleted"
   >
+        <div class="error" *ngIf="completeProjectError">
+          {{ completeProjectError }}
+        </div>
         <div class="title">{{ proj.name }}</div>
         <div class="description">{{ proj.description }}</div>
         <div class="dates">

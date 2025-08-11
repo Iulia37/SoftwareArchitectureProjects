@@ -3,6 +3,7 @@ import { ProjectService } from '../services/project-service';
 import { AuthService } from '../services/auth-service';
 import { Project } from '../models/project.type';
 import { catchError } from 'rxjs';
+import { Router } from '@angular/router';
 import { ProjectItem } from '../components/project-item/project-item';
 
 @Component({
@@ -12,8 +13,9 @@ import { ProjectItem } from '../components/project-item/project-item';
   styleUrl: './projects.scss'
 })
 export class Projects implements OnInit {
-  projectService = inject(ProjectService);
-  authService = inject(AuthService);
+  private projectService = inject(ProjectService);
+  private authService = inject(AuthService);
+  private router = inject(Router)
   projectItems = signal<Array<Project>>([]);
 
   ngOnInit(): void {
@@ -30,6 +32,9 @@ export class Projects implements OnInit {
       )
       .subscribe((projects) => {
         this.projectItems.set(projects);
+        if(this.projectItems().length == 0){
+          this.router.navigate(['/']);
+        }
       });
     }
   }
