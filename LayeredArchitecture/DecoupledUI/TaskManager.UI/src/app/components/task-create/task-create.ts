@@ -41,8 +41,7 @@ export class TaskCreate implements OnInit {
     if(this.form.valid){
       const newTask: Task = this.form.value;
       this.taskService.createTask(newTask).subscribe({
-        next: (response) => {
-          console.log(response);
+        next: () => {
           this.router.navigate(['/project', this.projectId]);
         },
         error: (err) => {

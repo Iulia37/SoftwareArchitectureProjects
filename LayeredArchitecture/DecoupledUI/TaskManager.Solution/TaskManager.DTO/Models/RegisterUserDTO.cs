@@ -23,7 +23,7 @@ namespace TaskManager.DTO.Models
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Email is required!")]
-        [EmailAddress(ErrorMessage = "Invalid format!")]
+        [EmailAddress(ErrorMessage = "Invalid email format!")]
         public string Email { get; set; }
     }
 }

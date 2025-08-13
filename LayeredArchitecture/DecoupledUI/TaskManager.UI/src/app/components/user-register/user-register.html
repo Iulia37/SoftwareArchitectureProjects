@@ -1,9 +1,12 @@
 <div class="form-container">
     <h3 class="form-title">Register</h3>
 
-    <div class="error-message" *ngIf="errors">
-        {{ errors }}
-    </div>
+    @if(errors)
+    {
+        <div class="error-message">
+            {{ errors }}
+        </div>
+    }
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-field">

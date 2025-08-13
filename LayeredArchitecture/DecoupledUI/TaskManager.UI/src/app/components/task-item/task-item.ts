@@ -15,7 +15,7 @@ export class TaskItem {
   task = input.required<Task>();
   taskToggled = output<Task>();
   taskDeleted = output<Task>();
-  taskService = inject(TaskService);
+  private taskService = inject(TaskService);
 
   taskChecked() { 
     

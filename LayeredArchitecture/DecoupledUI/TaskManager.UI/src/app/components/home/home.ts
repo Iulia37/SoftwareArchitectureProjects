@@ -5,7 +5,7 @@ import { TaskService } from '../../services/task-service';
 import { Project } from '../../models/project.type';
 import { Task } from '../../models/task.type';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 
 @Component({
@@ -18,6 +18,7 @@ export class Home implements OnInit {
   private authService = inject(AuthService);
   private projectService = inject(ProjectService);
   private taskService = inject(TaskService);
+  private router = inject(Router);
 
   projects = signal<Project[]>([]);
   allTasks = signal<Task[]>([]);
@@ -88,7 +89,7 @@ export class Home implements OnInit {
         this.allTasks.set(flattenedTasks);
       },
       error: (err) => {
-        console.error('Error loading dashboard data:', err);
+        this.router.navigate(['/error'], { state: { error: err} });
       }
     });
   }

@@ -32,22 +32,20 @@ export class AuthService {
     return this.http.post(url, user, { responseType: 'text' }).pipe(
       tap((token) => {
         localStorage.setItem(this.tokenKey, token);
-        this._token.set(token); // ACTUALIZEAZĂ SIGNAL-UL
+        this._token.set(token);
 
         try{
           const decodedToken: any = jwtDecode(token);
-          console.log(decodedToken);
           const userData = {
             id: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
             username: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
             email: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
           } as User;
-          console.log(userData);
 
           localStorage.setItem(this.userKey, JSON.stringify(userData));
           this._user.set(userData);
         }catch (error) {
-          console.error('Error decoding token:', error);
+          this.router.navigate(['/error'], { state: { error: error} });
         }
       }),
       catchError((error) => {
@@ -64,7 +62,7 @@ export class AuthService {
     localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tokenKey);
     this._user.set(null);
-    this._token.set(null); // ACTUALIZEAZĂ SIGNAL-UL
+    this._token.set(null);
     this.router.navigate(["/"]);
   }
 

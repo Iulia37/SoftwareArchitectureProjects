@@ -74,6 +74,8 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod());
 });
 
+builder.Configuration.AddEnvironmentVariables();
+
 var app = builder.Build();
 
 app.UseCors("AllowAngularApp");

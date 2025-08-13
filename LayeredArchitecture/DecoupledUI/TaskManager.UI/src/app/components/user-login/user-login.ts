@@ -36,6 +36,7 @@ export class UserLogin {
         },
         error: (err) => {
           this.errors = '';
+          console.log(err);
           if(err.error.errors){
             Object.keys(err.error.errors).forEach((field) => {
               this.errors = err.error.errors[field][0];

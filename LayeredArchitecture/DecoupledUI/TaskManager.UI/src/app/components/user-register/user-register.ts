@@ -21,18 +21,22 @@ export class UserRegister {
   form: FormGroup = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]]
+    email: ['', [Validators.required]]
   })
 
   onSubmit() {
+    console.log("Sunt in OnSubmit");
     if(this.form.valid)
     {
+      console.log("Sunt in OnSubmit if");
       const newUser: registerUser = this.form.value;
       this.authService.registerUser(newUser).subscribe({
         next: () => {
+          console.log("Sunt in OnSubmit next");
           this.router.navigate(['/user/login']);
         },
         error: (err) => {
+          console.log("Sunt in OnSubmit error");
           this.errors = '';
           
           if(err.error.errors){

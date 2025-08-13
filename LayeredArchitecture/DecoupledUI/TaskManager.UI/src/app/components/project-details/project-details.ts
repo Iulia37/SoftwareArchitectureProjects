@@ -67,7 +67,7 @@ export class ProjectDetails {
     if (completedTask) {
       this.taskService.markTaskCompleted(completedTask).subscribe({
         error: (err) => {
-          console.error(err);
+          this.router.navigate(['/error'], { state: { error: err} });
         }
       });
     }
