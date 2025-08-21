@@ -1,0 +1,15 @@
+<header>
+    <nav>
+        <span class="appName" routerLink="/">{{ title() }}</span>
+        <ul>
+            @if(!authService.isLoggedIn()){
+                <li routerLink="/user/login">Login</li>
+                <li routerLink="/user/register">Register</li>
+            }
+            @else{
+                <li (click)="logoutUser()">Logout</li>
+                <li class="username">{{ authService.user()?.username }}</li>
+            }
+        </ul>
+    </nav>
+</header>

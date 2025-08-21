@@ -1,1 +1,97 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: rgb(244, 235, 220);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+* {
+  outline: none;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: auto;
+  margin-top: 30px;
+  padding: 16px;
+  background: #edefed;
+  border-radius: 12px;
+  box-shadow: 5px 5px 10px 2px rgba(26, 25, 25, 0.3);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 60%;
+  }
+
+  .form-title {
+    font-size: 30px;
+    font-weight: 700;
+    padding: 20px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    label {
+      font-weight: 500;
+      font-size: 17px;
+      color: rgb(35, 34, 34);
+    }
+
+    input, textarea {
+      padding: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 5px 5px 15px 2px rgba(26, 25, 25, 0.3);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+  }
+
+  .form-button {
+    background-color: rgb(243, 222, 193);
+    box-shadow: 5px 5px 15px 2px rgba(26, 25, 25, 0.3);
+    width: 30%;
+    color: rgb(35, 34, 34);
+    height: 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+
+    &:hover {
+      background-color: rgb(245, 209, 159);
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    height: 20px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+}

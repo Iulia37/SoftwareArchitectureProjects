@@ -1,0 +1,32 @@
+<div class="form-container">
+    <h3 class="form-title">Register</h3>
+
+    @if(errors)
+    {
+        <div class="error-message">
+            {{ errors }}
+        </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+            <label for="username">Username:</label>
+            <input id="username" formControlName="username" required>
+        </div>
+        <div class="form-field">
+            <label for="email">Email:</label>
+            <input id="email" formControlName="email" required>
+        </div>
+        <div class="form-field">
+            <label for="password">Password:</label>
+            <input id="password" formControlName="password" type="password">
+        </div>
+        <div class="form-field">
+            <label for="role">Role:</label>
+            <select formControlName="role" id="role">
+                <option *ngFor="let role of roles" [value]="role.value">{{ role.label }}</option>
+            </select>
+        </div>
+        <button class="form-button" type="submit">Register</button>
+    </form>
+</div>
