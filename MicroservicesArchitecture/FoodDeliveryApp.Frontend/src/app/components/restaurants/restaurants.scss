@@ -1,0 +1,61 @@
+.restaurants-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 80vh;
+}
+
+.restaurants-header {
+  text-align: center;
+  margin-bottom: 50px;
+
+  h1 {
+    font-size: 2.8rem;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 700;
+    background-clip: text;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 500;
+  }
+}
+
+.restaurants-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fff8e7;
+  border-radius: 20px;
+  border: 2px dashed #f4a261;
+  margin: 40px 0;
+
+  .loading-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+}

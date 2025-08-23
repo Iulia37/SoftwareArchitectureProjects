@@ -19,7 +19,8 @@ namespace RestaurantService.API.Services
 
         public IEnumerable<MenuItem> getMenuItemsByRestaurantId(int restaurantId)
         {
-            return _menuItemRepo.getMenuItemsByRestaurantId(restaurantId);
+            var menuItems = _menuItemRepo.getMenuItemsByRestaurantId(restaurantId);
+            return menuItems;
         }
 
         public void addMenuItem(MenuItem menuItem)

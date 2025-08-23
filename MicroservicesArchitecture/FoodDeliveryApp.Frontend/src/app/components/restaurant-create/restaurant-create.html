@@ -1,0 +1,37 @@
+<div class="form-container">
+  <div class="form-title">New Restaurant</div>
+  
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+  
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="name">Restaurant name:</label>
+      <input id="name" formControlName="name" placeholder="Restaurant name" />
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email:</label>
+      <input id="email" formControlName="email" placeholder="Restaurant email" />
+    </div>
+
+    <div class="form-field">
+      <label for="address">Address:</label>
+      <input id="address" formControlName="address" placeholder="Restaurant address" />
+    </div>
+
+    <div class="form-field">
+      <label for="phoneNumber">Phone number:</label>
+      <input id="phoneNumber" formControlName="phoneNumber" placeholder="Phone number" />
+    </div>
+
+    <div class="form-field">
+      <label for="imageUrl">Upload image:</label>
+      <input type="file" (change)="onFileSelected($event)" />
+    </div>
+
+    <button class="form-button" type="submit" [disabled]="form.invalid">Create</button>
+  </form>
+
+</div>

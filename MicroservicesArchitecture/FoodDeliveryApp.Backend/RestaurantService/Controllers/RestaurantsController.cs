@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RestaurantService.API.Models;
-using RestaurantService.API.DTOs;
-using RestaurantService.API.Services;
+using Microsoft.EntityFrameworkCore;
 using Nelibur.ObjectMapper;
+using RestaurantService.API.DTOs;
+using RestaurantService.API.Models;
+using RestaurantService.API.Services;
 
 namespace RestaurantService.API.Controllers
 {
@@ -11,10 +12,12 @@ namespace RestaurantService.API.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IRestaurantService _restaurantService;
+        private readonly IWebHostEnvironment _env;
 
-        public RestaurantsController(IRestaurantService restaurantService)
+        public RestaurantsController(IRestaurantService restaurantService, IWebHostEnvironment env)
         {
             _restaurantService = restaurantService;
+            _env = env;
         }
 
         [HttpGet]
@@ -40,12 +43,16 @@ namespace RestaurantService.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddRestaurant([FromBody] RestaurantDTO restaurant)
+        public ActionResult AddRestaurant([FromBody] RestaurantDTO restaurantDto)
         {
             try
             {
-                _restaurantService.AddRestaurant(TinyMapper.Map<Restaurant>(restaurant));
-                return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurant.Id }, restaurant);
+                var restaurant = TinyMapper.Map<Restaurant>(restaurantDto);
+                _restaurantService.AddRestaurant(restaurant);
+
+                return CreatedAtAction(nameof(GetRestaurantById),
+                    new { id = restaurant.Id },
+                    restaurant);
             }
             catch (ArgumentException ex)
             {
@@ -79,6 +86,35 @@ namespace RestaurantService.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("image")]
+        public IActionResult Upload([FromForm] FileUploadDto upload)
+        {
+            var file = upload.File;
+
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded!");
+
+            var allowedExt = new[] { ".jpg", ".jpeg", ".png" };
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (!allowedExt.Contains(ext))
+                return BadRequest("Invalid file type. Allowed: .jpg, .jpeg, .png");
+
+            var imagesRoot = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "images");
+            Directory.CreateDirectory(imagesRoot);
+
+            var fileName = $"{Guid.NewGuid():N}{ext}";
+            var savePath = Path.Combine(imagesRoot, fileName);
+
+            using (var stream = new FileStream(savePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            var relativeUrl = $"/images/{fileName}";
+            return Ok(new { imageUrl = relativeUrl });
         }
     }
 }

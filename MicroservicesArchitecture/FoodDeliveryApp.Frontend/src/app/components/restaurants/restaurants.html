@@ -1,6 +1,19 @@
-<div class="restaurants">
-    @for (rest of restaurants(); track rest.id) {
-      <app-restaurant-item 
-      [restaurant]="rest" />
-    }
+<div class="restaurants-container">
+  <div class="restaurants-header">
+    <h1>Partner Restaurants</h1>
+    <p>Connect with our trusted restaurant partners</p>
   </div>
+
+  @if (restaurants().length > 0) {
+    <div class="restaurants-grid">
+      @for (restaurant of restaurants(); track restaurant.id) {
+        <app-restaurant-item [restaurant]="restaurant"></app-restaurant-item>
+      }
+    </div>
+  } @else {
+    <div class="loading-state">
+      <div class="loading-icon">🍽️</div>
+      <h3>Loading restaurants...</h3>
+    </div>
+  }
+</div>

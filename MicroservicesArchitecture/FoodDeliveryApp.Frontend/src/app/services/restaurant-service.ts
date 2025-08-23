@@ -17,4 +17,27 @@ export class RestaurantService {
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<Restaurant>(url);
   }
+
+  getImageUrl(imagePath: string) {
+    return 'https://localhost:7146'+ imagePath;
+  }
+
+  createRestaurant = (restaurant: Restaurant) => {
+    return this.http.post(this.apiUrl, restaurant);
+  } 
+
+  updateRestaurant = (restaurant: Restaurant) => {
+    const url = `${this.apiUrl}/edit/${restaurant.id}`;
+    return this.http.post(url, restaurant);
+  }
+
+  deleteProject = (restaurant: Restaurant) => {
+    const url = `${this.apiUrl}/${restaurant.id}`;
+    return this.http.delete(url);
+  }
+
+  uploadImage(formData: FormData) {
+    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/image`, formData);
+  }
+
 }

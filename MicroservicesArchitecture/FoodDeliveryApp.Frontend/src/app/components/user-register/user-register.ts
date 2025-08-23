@@ -18,16 +18,10 @@ export class UserRegister {
 
   errors: string = '';
 
-  roles = [
-    { value: 'User', label: 'User' },
-    { value: 'Owner', label: 'Owner' }
-  ];
-
   form: FormGroup = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
-    email: ['', [Validators.required]],
-    role: ['', [Validators.required]]
+    email: ['', [Validators.required]]
   })
 
   onSubmit() {

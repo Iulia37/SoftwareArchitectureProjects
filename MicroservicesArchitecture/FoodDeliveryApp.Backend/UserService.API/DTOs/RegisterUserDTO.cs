@@ -19,8 +19,5 @@ namespace UserService.API.DTOs
         [Required(ErrorMessage = "Email required!")]
         [EmailAddress]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = "Role required!")]
-        public string Role { get; set; }
     }
 }

@@ -20,10 +20,6 @@ namespace RestaurantService.API.Controllers
         public ActionResult GetMenuItemsByRestaurantId(int restaurantId)
         {
             var menuItems = _menuItemService.getMenuItemsByRestaurantId(restaurantId);
-            if(menuItems == null || !menuItems.Any())
-            {
-                return BadRequest("No menu items found!");
-            }
             return Ok(menuItems);
         }
 

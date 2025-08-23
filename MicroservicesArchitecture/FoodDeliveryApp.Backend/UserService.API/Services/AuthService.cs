@@ -33,7 +33,7 @@ namespace UserService.API.Services
             newUser.Username = registerUser.Username;
             newUser.Password = hashedPassword;
             newUser.Email = registerUser.Email;
-            newUser.Role = registerUser.Role;
+            newUser.Role = "User";
 
             _userRepository.addUser(newUser);
 

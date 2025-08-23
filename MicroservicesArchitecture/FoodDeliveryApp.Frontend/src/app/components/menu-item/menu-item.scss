@@ -1,0 +1,27 @@
+.item-container {
+    padding: 10px 20px;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid rgb(177, 169, 169);
+    border-radius: 10px;
+
+    .item-presentation {
+
+        .item-name {
+            font-size: 20px;
+        }
+
+        .item-description{
+            color: grey;
+        }
+    }
+
+    .item-order{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+    }
+}

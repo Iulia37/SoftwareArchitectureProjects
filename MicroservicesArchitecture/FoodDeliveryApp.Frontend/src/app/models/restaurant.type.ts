@@ -3,5 +3,6 @@ export type Restaurant = {
     name: string,
     email: string,
     address: string,
-    phoneNumber: string
+    phoneNumber: string,
+    imageUrl: string
 }

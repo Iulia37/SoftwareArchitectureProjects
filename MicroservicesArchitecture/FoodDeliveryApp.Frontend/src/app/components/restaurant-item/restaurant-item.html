@@ -1,3 +1,12 @@
-<div>
-    {{restaurant().name}}
+<div class="restaurant-card" (click)="onRestaurantClick()"
+[ngStyle]="{'background-image': 'url(' + getImageUrl() + ')'}">
+
+  <div class="restaurant-header">
+    <h3 class="restaurant-name">{{ restaurant().name }}</h3>
+  </div>
+  
+  <div class="restaurant-address">
+      <span class="icon">📍</span>
+      <span class="text">{{ restaurant().address }}</span>
+  </div>
 </div>

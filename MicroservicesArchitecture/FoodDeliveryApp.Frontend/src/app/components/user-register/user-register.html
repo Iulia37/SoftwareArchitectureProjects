@@ -21,12 +21,6 @@
             <label for="password">Password:</label>
             <input id="password" formControlName="password" type="password">
         </div>
-        <div class="form-field">
-            <label for="role">Role:</label>
-            <select formControlName="role" id="role">
-                <option *ngFor="let role of roles" [value]="role.value">{{ role.label }}</option>
-            </select>
-        </div>
         <button class="form-button" type="submit">Register</button>
     </form>
 </div>

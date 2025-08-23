@@ -1,0 +1,39 @@
+<div class="restaurant-container">
+    <div class="restaurant">
+        <div class="header">
+            <div class="background"
+                [ngStyle]="{'background-image': 'url(' + imageUrl() + ')'}" ></div>
+            <h3 class="restaurant-name">{{ restaurant()?.name }}</h3>
+        </div>
+  
+        <div class="restaurant-details">
+            <div class="restaurant-info">
+                <span class="icon">📍</span>
+                <span class="text">{{ restaurant()?.address }}</span>
+            </div>
+            <div class="restaurant-info">
+                <span class="icon">📞</span>
+                <span class="text">{{ restaurant()?.phoneNumber }}</span>
+            </div>
+            <div class="restaurant-info">
+                <span class="icon">📧</span>
+                <span class="text">{{ restaurant()?.email }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="menu-order">
+        <div class="menu-items">
+            <div *ngIf="menuItems().length > 0">
+                @for(item of menuItems(); track item.id)
+                {
+                    <app-menu-item
+                    [menuItem]="item"
+                    ></app-menu-item>
+                }
+            </div>
+        </div>
+        <div class="order">
+            Order (to do)
+        </div>
+    </div>
+</div>
