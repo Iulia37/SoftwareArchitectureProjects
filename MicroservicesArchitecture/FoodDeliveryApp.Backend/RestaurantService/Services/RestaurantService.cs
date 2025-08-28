@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantService.API.Data;
 using RestaurantService.API.Models;
+using System;
 
 namespace RestaurantService.API.Services
 {
@@ -16,11 +17,17 @@ namespace RestaurantService.API.Services
         }
         public Restaurant GetRestaurantById(int id)
         {
-            return _restaurantRepository.GetRestaurantById(id);
+            var restaurant = _restaurantRepository.GetRestaurantById(id);
+            if(restaurant == null)
+            {
+                throw new ArgumentException("Restaurant not found!");
+            }
+            return restaurant;
         }
         public IEnumerable<Restaurant> GetAllRestaurants()
         {
-            return _restaurantRepository.GetAllRestaurants();
+            var restaurants = _restaurantRepository.GetAllRestaurants();
+            return restaurants;
         }
         public void AddRestaurant(Restaurant restaurant)
         {
@@ -38,7 +45,8 @@ namespace RestaurantService.API.Services
             restaurant.Address = updatedRestaurant.Address;
             restaurant.Email = updatedRestaurant.Email;
             restaurant.PhoneNumber = updatedRestaurant.PhoneNumber;
-            
+            restaurant.ImageUrl = updatedRestaurant.ImageUrl;
+
             _restaurantRepository.UpdateRestaurant(restaurant);
         }
         public void DeleteRestaurant(int id)
@@ -51,26 +59,29 @@ namespace RestaurantService.API.Services
             _restaurantRepository.DeleteRestaurant(id);
         }
 
-        public string UploadImage(int restaurantId, IFormFile image)
+        public string UploadImage(IFormFile image)
         {
-            var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
-            if (restaurant == null)
-                throw new Exception("Restaurant not found!");
+            var allowedExt = new[] { ".jpg", ".jpeg", ".png" };
+            var ext = Path.GetExtension(image.FileName).ToLowerInvariant();
 
-            var uploads = Path.Combine(_env.WebRootPath, "images");
-            Directory.CreateDirectory(uploads);
+            if (!allowedExt.Contains(ext))
+            {
+                throw new ArgumentException("Invalid file type. Only .jpg, .jpeg, .png are allowed.");
+            }
 
-            var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(image.FileName)}";
-            var filePath = Path.Combine(uploads, fileName);
+            var imagesRoot = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "images");
+            Directory.CreateDirectory(imagesRoot);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            var fileName = $"{Guid.NewGuid():N}{ext}";
+            var savePath = Path.Combine(imagesRoot, fileName);
+
+            using (var stream = new FileStream(savePath, FileMode.Create))
             {
                 image.CopyTo(stream);
             }
-            restaurant.ImageUrl = $"/images/{fileName}";
-            _restaurantRepository.UpdateRestaurant(restaurant);
 
-            return restaurant.ImageUrl;
+            var relativeUrl = $"/images/{fileName}";
+            return relativeUrl;
         }
     }
 }

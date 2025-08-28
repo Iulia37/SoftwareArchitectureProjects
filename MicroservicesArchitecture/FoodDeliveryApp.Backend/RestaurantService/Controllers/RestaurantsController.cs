@@ -12,19 +12,17 @@ namespace RestaurantService.API.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IRestaurantService _restaurantService;
-        private readonly IWebHostEnvironment _env;
 
-        public RestaurantsController(IRestaurantService restaurantService, IWebHostEnvironment env)
+        public RestaurantsController(IRestaurantService restaurantService)
         {
             _restaurantService = restaurantService;
-            _env = env;
         }
 
         [HttpGet]
         public ActionResult GetAllRestaurants()
         {
             var restaurants = _restaurantService.GetAllRestaurants();
-            if (restaurants == null || !restaurants.Any())
+            if(!restaurants.Any())
             {
                 return BadRequest("No restaurants found!");
             }
@@ -34,12 +32,15 @@ namespace RestaurantService.API.Controllers
         [HttpGet("{id}")]
         public ActionResult GetRestaurantById(int id)
         {
-            var restaurant = _restaurantService.GetRestaurantById(id);
-            if (restaurant == null)
+            try
             {
-                return BadRequest("Restaurant not found!");
+                var restaurant = _restaurantService.GetRestaurantById(id);
+                return Ok(restaurant);
             }
-            return Ok(restaurant);
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -60,13 +61,13 @@ namespace RestaurantService.API.Controllers
             }
         }
 
-        [HttpPost("edit/{id}")]
+        [HttpPut("{id}")]
         public ActionResult UpdateRestaurant([FromBody] RestaurantDTO updatedRestaurant)
         {
             try
             {
                 _restaurantService.UpdateRestaurant(TinyMapper.Map<Restaurant>(updatedRestaurant));
-                return Ok("Restaurant updated successfully!");
+                return Ok();
             }
             catch (ArgumentException ex)
             {
@@ -91,30 +92,18 @@ namespace RestaurantService.API.Controllers
         [HttpPost("image")]
         public IActionResult Upload([FromForm] FileUploadDto upload)
         {
-            var file = upload.File;
 
-            if (file == null || file.Length == 0)
+            if (upload.File == null || upload.File.Length == 0)
                 return BadRequest("No file uploaded!");
 
-            var allowedExt = new[] { ".jpg", ".jpeg", ".png" };
-            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-            if (!allowedExt.Contains(ext))
-                return BadRequest("Invalid file type. Allowed: .jpg, .jpeg, .png");
-
-            var imagesRoot = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "images");
-            Directory.CreateDirectory(imagesRoot);
-
-            var fileName = $"{Guid.NewGuid():N}{ext}";
-            var savePath = Path.Combine(imagesRoot, fileName);
-
-            using (var stream = new FileStream(savePath, FileMode.Create))
+            try
             {
-                file.CopyTo(stream);
+                return Ok(new { imageUrl = _restaurantService.UploadImage(upload.File) });
             }
-
-            var relativeUrl = $"/images/{fileName}";
-            return Ok(new { imageUrl = relativeUrl });
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

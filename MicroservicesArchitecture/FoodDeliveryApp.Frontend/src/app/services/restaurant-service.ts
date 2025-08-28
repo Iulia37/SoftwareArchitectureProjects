@@ -27,11 +27,11 @@ export class RestaurantService {
   } 
 
   updateRestaurant = (restaurant: Restaurant) => {
-    const url = `${this.apiUrl}/edit/${restaurant.id}`;
-    return this.http.post(url, restaurant);
+    const url = `${this.apiUrl}/${restaurant.id}`;
+    return this.http.put(url, restaurant);
   }
 
-  deleteProject = (restaurant: Restaurant) => {
+  deleteRestaurant = (restaurant: Restaurant) => {
     const url = `${this.apiUrl}/${restaurant.id}`;
     return this.http.delete(url);
   }

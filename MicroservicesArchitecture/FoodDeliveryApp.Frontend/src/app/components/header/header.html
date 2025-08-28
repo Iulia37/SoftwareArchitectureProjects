@@ -8,6 +8,7 @@
             }
             @else{
                 <li [routerLink]="['/restaurant/create']">Add Restaurant</li>
+                <li [routerLink]="['/restaurants']">Restaurants</li>
                 <li (click)="logoutUser()">Logout</li>
                 <li class="username">{{ authService.user()?.username }}</li>
             }

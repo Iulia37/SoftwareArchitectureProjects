@@ -25,3 +25,19 @@
         align-items: center;
     }
 }
+
+.menuItem-buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+
+    .delete, .edit {
+        background: transparent;
+        border-radius: 8px;
+        border: 1px solid rgba(87, 71, 30, 0.1);
+
+        &:hover {
+            background: rgba(139, 105, 20, 0.1);
+        }
+    }
+}

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Nelibur.ObjectMapper;
 using RestaurantService.API.Models;
 using RestaurantService.API.Services;
 using System.Security.Claims;
+using RestaurantService.API.DTOs;
 
 namespace RestaurantService.API.Controllers
 {
@@ -16,21 +18,13 @@ namespace RestaurantService.API.Controllers
             _menuItemService = menuItemService;
         }
 
-        [HttpGet("{restaurantId}")]
-        public ActionResult GetMenuItemsByRestaurantId(int restaurantId)
-        {
-            var menuItems = _menuItemService.getMenuItemsByRestaurantId(restaurantId);
-            return Ok(menuItems);
-        }
-
-        [HttpPost]
-        public IActionResult AddMenuItem([FromBody] MenuItem newItem)
+        [HttpGet("{id}")]
+        public ActionResult GetMenuItemById(int id)
         {
             try
             {
-                _menuItemService.addMenuItem(newItem);
-                return CreatedAtAction(nameof(GetMenuItemsByRestaurantId), 
-                                       new { restaurantId = newItem.RestaurantId }, newItem);
+                var menuItem = _menuItemService.getMenuItemById(id);
+                return Ok(menuItem);
             }
             catch (ArgumentException ex)
             {
@@ -38,13 +32,37 @@ namespace RestaurantService.API.Controllers
             }
         }
 
-        [HttpPost("edit/{id}")]
-        public IActionResult EditMenuItem([FromBody] MenuItem updatedItem)
+        [HttpGet("restaurant/{restaurantId}")]
+        public ActionResult GetMenuItemsByRestaurantId(int restaurantId)
+        {
+            var menuItems = _menuItemService.getMenuItemsByRestaurantId(restaurantId);
+            return Ok(menuItems);
+        }
+
+        [HttpPost]
+        public IActionResult AddMenuItem([FromBody] MenuItemDTO newItem)
         {
             try
             {
-                _menuItemService.updateMenuItem(updatedItem);
-                return Ok("Menu item updated successfully!");
+                var menuItems = TinyMapper.Map<MenuItem>(newItem);
+                _menuItemService.addMenuItem(menuItems);
+                return CreatedAtAction(nameof(GetMenuItemsByRestaurantId), 
+                                       new { restaurantId = menuItems.RestaurantId }, menuItems);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult EditMenuItem([FromBody] MenuItemDTO updatedItem)
+        {
+            try
+            {
+                var menuItem = TinyMapper.Map<MenuItem>(updatedItem);
+                _menuItemService.updateMenuItem(menuItem);
+                return Ok();
             }
             catch (ArgumentException ex)
             {
@@ -55,12 +73,15 @@ namespace RestaurantService.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteMenuItem(int id)
         {
-            var menuItem = _menuItemService.getMenuItemById(id);
-            if (menuItem == null)
-                return BadRequest("Not found!");
-
-            _menuItemService.deleteMenuItem(id);
-            return NoContent();
+            try
+            {
+                _menuItemService.deleteMenuItem(id);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

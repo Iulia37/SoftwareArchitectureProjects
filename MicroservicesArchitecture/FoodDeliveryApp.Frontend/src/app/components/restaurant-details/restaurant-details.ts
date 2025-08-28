@@ -1,16 +1,17 @@
-import { Component, signal, inject, OnInit, computed } from '@angular/core';
+import { Component, signal, inject, OnInit, computed, input } from '@angular/core';
 import { Restaurant } from '../../models/restaurant.type'
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RestaurantService } from '../../services/restaurant-service';
 import { MenuItemService } from '../../services/menu-item-service';
 import { MenuItem } from '../../models/menu-item.type'
 import { forkJoin, of, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MenuItem as M } from '../menu-item/menu-item';
+import { OrderComponent } from "../order-component/order-component";
 
 @Component({
   selector: 'app-restaurant-details',
-  imports: [CommonModule, M],
+  imports: [CommonModule, M, OrderComponent, RouterLink],
   templateUrl: './restaurant-details.html',
   styleUrl: './restaurant-details.scss'
 })
@@ -47,8 +48,29 @@ export class RestaurantDetails implements OnInit {
         this.menuItems.set(menuItems)
       },
       error: (err) => {
-        //this.router.navigate(['/error'], { state: { error: err} });
+        this.router.navigate(['/error'], { state: { error: err} });
       }
     });
+  }
+
+  deleteRestaurant(restaurant: Restaurant | null){
+    if(restaurant != null)
+    {
+      this.restaurantService.deleteRestaurant(restaurant).subscribe({
+        next: () => {
+          this.router.navigate(['/restaurants']);
+        },
+        error: (err) => {
+          this.router.navigate(['/error'], { state: { error: err} });
+        }
+      })
+    }
+  }
+
+  deleteMenuItem(menuItem: MenuItem){
+    this.menuItems.update((items) => {
+      const filteredItems = items.filter(it => it.id !== menuItem.id);
+      return filteredItems;
+    })
   }
 }

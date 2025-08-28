@@ -3,6 +3,7 @@ using Nelibur.ObjectMapper;
 using RestaurantService.API.Data;
 using RestaurantService.API.DTOs;
 using RestaurantService.API.Services;
+using RestaurantService.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ builder.Services.AddScoped<IRestaurantService, RestaurantService.API.Services.Re
 
 TinyMapper.Bind<RestaurantService.API.Models.Restaurant, RestaurantDTO>();
 TinyMapper.Bind<RestaurantDTO, RestaurantService.API.Models.Restaurant>();
+
+TinyMapper.Bind<MenuItem, MenuItemDTO>();
+TinyMapper.Bind<MenuItemDTO, MenuItem>();
 
 builder.Services.AddCors(options =>
 {

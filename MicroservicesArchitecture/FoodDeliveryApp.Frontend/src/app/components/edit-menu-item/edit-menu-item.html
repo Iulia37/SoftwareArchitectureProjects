@@ -1,0 +1,27 @@
+<div class="form-container">
+  <div class="edit-text">Edit menu item</div>
+
+  <div class="error-message" *ngIf="errors">
+    {{ errors }}
+  </div>
+
+  <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="name">Name:</label>
+      <input id="name" formControlName="name" />
+    </div>
+
+    <div class="form-field">
+      <label for="description">Description:</label>
+      <textarea id="description" formControlName="description"></textarea>
+    </div>
+
+    <div class="form-field">
+      <label for="price">Price:</label>
+      <input type="number" id="price" formControlName="price" />
+    </div>
+
+    <button class="form-button" type="submit" [disabled]="form.invalid">Save changes</button>
+  </form>
+
+</div>

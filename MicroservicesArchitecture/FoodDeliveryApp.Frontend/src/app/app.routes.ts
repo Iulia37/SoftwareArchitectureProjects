@@ -37,5 +37,23 @@ export const routes: Routes = [
         loadComponent: () => {
             return import('./components/restaurant-details/restaurant-details').then((m) => m.RestaurantDetails);
         }
+    },
+    {
+        path: 'restaurant/edit/:id',
+        loadComponent: () => {
+            return import('./components/edit-restaurant/edit-restaurant').then((m) => m.EditRestaurant);
+        }
+    },
+    {
+        path: 'menu-item/create/:id',
+        loadComponent: () => {
+            return import('./components/create-menu-item/create-menu-item').then((m) => m.CreateMenuItem);
+        }
+    },
+    {
+        path: 'menu-item/edit/:id',
+        loadComponent: () => {
+            return import('./components/edit-menu-item/edit-menu-item').then((m) => m.EditMenuItem);
+        }
     }
 ];

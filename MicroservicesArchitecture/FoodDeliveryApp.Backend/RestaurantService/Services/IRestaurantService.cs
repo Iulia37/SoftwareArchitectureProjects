@@ -10,6 +10,6 @@ namespace RestaurantService.API.Services
         public void UpdateRestaurant(Restaurant restaurant);
         public void DeleteRestaurant(int id);
 
-        public string UploadImage(int restaurantId, IFormFile image);
+        public string UploadImage(IFormFile image);
     }
 }

@@ -5,6 +5,12 @@
     </div>
     <div class="item-order">
         <div class="item-price">{{ menuItem().price }}$</div>
-        <app-counter></app-counter>
+        <app-counter 
+            [menuItem]="menuItem()">
+        </app-counter>
+        <div class="menuItem-buttons">
+            <button class="edit" [routerLink]="['/menu-item/edit', menuItem().id]">Edit</button>
+            <button class="delete" (click)="deleteMenuItem(menuItem())">Delete</button>
+        </div>
     </div>
 </div>
