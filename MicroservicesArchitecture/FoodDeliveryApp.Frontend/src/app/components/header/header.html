@@ -7,10 +7,15 @@
                 <li routerLink="/user/register">Register</li>
             }
             @else{
-                <li [routerLink]="['/restaurant/create']">Add Restaurant</li>
+                @if(authService.isAdmin()){
+                    <li [routerLink]="['/restaurant/create']">Add Restaurant</li>
+                }
+                
                 <li [routerLink]="['/restaurants']">Restaurants</li>
                 <li (click)="logoutUser()">Logout</li>
-                <li class="username">{{ authService.user()?.username }}</li>
+                <li class="username"
+                    [routerLink]="['/user', authService.getUserId()]"
+                >{{ authService.user()?.username }}</li>
             }
         </ul>
     </nav>

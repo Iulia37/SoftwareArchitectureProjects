@@ -55,5 +55,17 @@ export const routes: Routes = [
         loadComponent: () => {
             return import('./components/edit-menu-item/edit-menu-item').then((m) => m.EditMenuItem);
         }
+    },
+    {
+        path: 'payment',
+        loadComponent: () => {
+            return import('./components/payment-component/payment-component').then((m) => m.PaymentComponent);
+        }
+    },
+    {
+        path: 'user/:id',
+        loadComponent: () => {
+            return import('./components/user-details/user-details').then((m) => m.UserDetails);
+        }
     }
 ];

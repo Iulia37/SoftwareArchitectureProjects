@@ -19,18 +19,21 @@
                 <span class="icon">📧</span>
                 <span class="text">{{ restaurant()?.email }}</span>
             </div>
-            <button class="restaurant-button"
-                [routerLink]="['/menu-item/create', restaurant()?.id]">
-                Add menu item
-            </button>
-            <button class="restaurant-button"
-                [routerLink]="['/restaurant/edit', restaurant()?.id]">
-                Edit Restaurant
-            </button>
-            <button class="restaurant-button"
-                (click)="deleteRestaurant(restaurant())">
-                Delete
-            </button>
+            @if(authService.isAdmin())
+            {
+                <button class="restaurant-button"
+                    [routerLink]="['/menu-item/create', restaurant()?.id]">
+                    Add menu item
+                </button>
+                <button class="restaurant-button"
+                    [routerLink]="['/restaurant/edit', restaurant()?.id]">
+                    Edit Restaurant
+                </button>
+                <button class="restaurant-button"
+                    (click)="deleteRestaurant(restaurant())">
+                    Delete
+                </button>
+            }
         </div>
     </div>
     <div class="menu-order">

@@ -20,12 +20,12 @@ export class MenuItemService {
   }
 
   createMenuItem = (menuItem: MenuItem) => {
-    return this.http.post(this.apiUrl, menuItem);
+    return this.http.post<MenuItem>(this.apiUrl, menuItem);
   }
 
   updateMenuItem = (menuItem: MenuItem) => {
     const url = `${this.apiUrl}/${menuItem.id}`;
-    return this.http.put(url, menuItem);
+    return this.http.put<MenuItem>(url, menuItem);
   }
 
   deleteMenuItem = (menuItem: MenuItem) => {

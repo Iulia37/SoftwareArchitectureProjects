@@ -18,17 +18,17 @@ export class RestaurantService {
     return this.http.get<Restaurant>(url);
   }
 
-  getImageUrl(imagePath: string) {
+  getImageUrl = (imagePath: string) => {
     return 'https://localhost:7146'+ imagePath;
   }
 
   createRestaurant = (restaurant: Restaurant) => {
-    return this.http.post(this.apiUrl, restaurant);
+    return this.http.post<Restaurant>(this.apiUrl, restaurant);
   } 
 
   updateRestaurant = (restaurant: Restaurant) => {
     const url = `${this.apiUrl}/${restaurant.id}`;
-    return this.http.put(url, restaurant);
+    return this.http.put<Restaurant>(url, restaurant);
   }
 
   deleteRestaurant = (restaurant: Restaurant) => {
@@ -36,7 +36,7 @@ export class RestaurantService {
     return this.http.delete(url);
   }
 
-  uploadImage(formData: FormData) {
+  uploadImage = (formData: FormData) => {
     return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/image`, formData);
   }
 

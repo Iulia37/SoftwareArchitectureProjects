@@ -1,18 +1,24 @@
 <div class="order-container">
-    <div class="title">Your order</div>
-    <div class="empty-order" *ngIf="orderItems().length == 0">Start by adding items to your order</div>
-    <div class="order" *ngIf="orderItems().length > 0">
-        <div *ngFor="let item of orderItems()" class="order-item">
-            <div>
-                {{ item.quantity }} x {{ item.menuItemName }}
+    @if(authService.isLoggedIn())
+    {
+        <div class="title">Your order</div>
+        <div class="empty-order" *ngIf="orderItems().length == 0">Start by adding items to your order</div>
+        <div class="order" *ngIf="orderItems().length > 0">
+            <div *ngFor="let item of orderItems()" class="order-item">
+                <div>
+                    {{ item.quantity }} x {{ item.menuItemName }}
+                </div>
+                <div class="price">
+                    {{ item.unitPrice * item.quantity }}$
+                </div>
             </div>
-            <div class="price">
-                {{ item.unitPrice * item.quantity }}$
+            <div class="total-price">
+                Total price: <div>{{ totalPrice() }}$</div>
             </div>
+            <button class="order-button" (click)="submitOrder()">Order</button>
         </div>
-        <div class="total-price">
-            Total price: <div>{{ totalPrice() }}$</div>
-        </div>
-        <button class="order-button" (click)="submitOrder()">Order</button>
-    </div>
+    }
+    @else{
+        <div class="empty-order">You must be logged in to place an order</div>
+    }
 </div>

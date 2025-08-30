@@ -1,8 +1,9 @@
 import { Component, input, inject, output } from '@angular/core';
 import { MenuItem as MItem } from '../../models/menu-item.type'
 import { MenuItemService } from '../../services/menu-item-service';
+import { AuthService } from '../../services/auth-service';
 import { Counter } from '../counter/counter';
-import { RouterLink } from "@angular/router";
+import { RouterLink, Router } from "@angular/router";
 
 @Component({
   selector: 'app-menu-item',
@@ -12,6 +13,8 @@ import { RouterLink } from "@angular/router";
 })
 export class MenuItem {
   private menuItemService = inject(MenuItemService);
+  private router = inject(Router);
+  authService = inject(AuthService);
 
   menuItem = input.required<MItem>();
   itemDeleted = output<MItem>();
@@ -22,7 +25,7 @@ export class MenuItem {
         this.itemDeleted.emit(this.menuItem());
       },
       error: (err) => {
-        
+        this.router.navigate(['/error'], { state: { error: err} });
       }
     })
   }

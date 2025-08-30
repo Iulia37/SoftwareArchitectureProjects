@@ -22,12 +22,12 @@ export class OrderService {
   }
 
   createOrder = (order: OrderRequest) => {
-    return this.http.post(this.apiUrl, order);
+    return this.http.post<Order>(this.apiUrl, order);
   }
 
-  editOrder = (order: Order) => {
+  updateOrder = (order: Order) => {
     const url = `${this.apiUrl}/${order.id}`;
-    return this.http.put(url, order);
+    return this.http.put<Order>(url, order);
   }
 
   deleteOrder = (id: string) => {

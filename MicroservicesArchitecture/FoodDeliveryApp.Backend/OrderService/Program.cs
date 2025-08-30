@@ -19,6 +19,9 @@ TinyMapper.Bind<Order, OrderDTO>();
 TinyMapper.Bind<OrderItemDTO, OrderItem>();
 TinyMapper.Bind<OrderItem, OrderItemDTO>();
 
+TinyMapper.Bind<List<OrderItemDTO>, OrderItem[]>();
+TinyMapper.Bind<OrderItem[], List<OrderItemDTO>>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp",

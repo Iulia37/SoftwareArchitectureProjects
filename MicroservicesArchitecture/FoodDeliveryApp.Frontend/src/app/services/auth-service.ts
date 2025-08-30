@@ -79,4 +79,8 @@ export class AuthService {
   getUserId(): number | null {
     return this._user()?.id ?? null;
   }
+
+  isAdmin() {
+    return this._user()?.role == "Admin";
+  }
 }

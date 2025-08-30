@@ -1,0 +1,29 @@
+<div class="payment-container" *ngIf="order()">
+  <form class="payment-form" (ngSubmit)="pay()">
+    <div class="total">Total: {{ order()?.totalPrice }}$</div>
+    
+    <div class="form-group">
+      <label for="address">Delivery address</label>
+      <input id="address" type="text" [(ngModel)]="address" name="address" placeholder="Enter your full address" />
+    </div>
+    
+    <div class="form-group payment-method">
+      <label>Payment method</label>
+      <div>
+        <label><input type="radio" name="paymentMethod" value="card" [(ngModel)]="paymentMethod"> Card</label>
+        <label><input type="radio" name="paymentMethod" value="cash" [(ngModel)]="paymentMethod"> Cash</label>
+      </div>
+    </div>
+    
+    <div class="card" *ngIf="paymentMethod === 'card'">
+      <input class="card-input" placeholder="Card number" [(ngModel)]="cardDetails.number" name="cardNumber">
+      <input class="card-input" placeholder="Expiry date (MM/YY)" [(ngModel)]="cardDetails.expiry" name="expiry">
+      <input class="card-input" placeholder="CVV" [(ngModel)]="cardDetails.cvv" name="cvv">
+    </div>
+    
+    <button class="pay-button" type="submit" [disabled]="loading">Pay</button>
+
+    <div *ngIf="loading">Processing payment...</div>
+    <div *ngIf="message">{{ message }}</div>
+  </form>
+</div>

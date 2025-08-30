@@ -3,6 +3,8 @@ import { OrderRequest } from '../../models/orderRequest.type';
 import { OrderService } from '../../services/order-service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth-service';
+import { Router } from '@angular/router';
+import { Order } from '../../models/order.type';
 
 @Component({
   selector: 'app-order-component',
@@ -12,7 +14,8 @@ import { AuthService } from '../../services/auth-service';
 })
 export class OrderComponent {
   private orderService = inject(OrderService);
-  private authService = inject(AuthService);
+  private router = inject(Router);
+  authService = inject(AuthService);
 
   restaurantId = input();
   readonly orderItems = this.orderService.orderItems;
@@ -32,7 +35,14 @@ export class OrderComponent {
         restaurantId: Number(this.restaurantId()),
         orderItems: this.orderItems()
     }
-    this.orderService.createOrder(orderRequest);
+    this.orderService.createOrder(orderRequest).subscribe({
+      next: (createdOrder: Order) => {
+        this.router.navigate(['/payment'], { queryParams: { orderId: createdOrder.id}});
+      },
+      error: (err) => {
+        this.router.navigate(['/error'], { state: { error: err} });
+      }
+    });
   }
   
 }

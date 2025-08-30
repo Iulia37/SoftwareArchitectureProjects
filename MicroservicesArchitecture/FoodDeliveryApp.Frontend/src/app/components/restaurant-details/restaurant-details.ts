@@ -2,6 +2,7 @@ import { Component, signal, inject, OnInit, computed, input } from '@angular/cor
 import { Restaurant } from '../../models/restaurant.type'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RestaurantService } from '../../services/restaurant-service';
+import { AuthService } from '../../services/auth-service';
 import { MenuItemService } from '../../services/menu-item-service';
 import { MenuItem } from '../../models/menu-item.type'
 import { forkJoin, of, switchMap } from 'rxjs';
@@ -27,6 +28,7 @@ export class RestaurantDetails implements OnInit {
   private router = inject(Router);
   private restaurantService = inject(RestaurantService);
   private menuItemsService = inject(MenuItemService);
+  authService = inject(AuthService);
 
   ngOnInit(): void 
   {
