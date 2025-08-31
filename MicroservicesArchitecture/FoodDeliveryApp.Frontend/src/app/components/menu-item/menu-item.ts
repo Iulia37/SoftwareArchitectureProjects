@@ -25,7 +25,7 @@ export class MenuItem {
         this.itemDeleted.emit(this.menuItem());
       },
       error: (err) => {
-        this.router.navigate(['/error'], { state: { error: err} });
+        this.router.navigate(['/error'], { state: { error: err.error} });
       }
     })
   }

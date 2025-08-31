@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Nelibur.ObjectMapper;
 using PaymentService.API.DTOs;
 using PaymentService.API.Models;
@@ -6,6 +7,7 @@ using PaymentService.API.Services;
 
 namespace PaymentService.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PaymentsController : Controller

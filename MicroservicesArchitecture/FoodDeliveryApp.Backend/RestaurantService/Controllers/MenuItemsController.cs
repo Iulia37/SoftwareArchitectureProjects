@@ -2,11 +2,12 @@
 using Nelibur.ObjectMapper;
 using RestaurantService.API.Models;
 using RestaurantService.API.Services;
-using System.Security.Claims;
 using RestaurantService.API.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestaurantService.API.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class MenuItemsController : Controller
@@ -18,6 +19,7 @@ namespace RestaurantService.API.Controllers
             _menuItemService = menuItemService;
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public ActionResult GetMenuItemById(int id)
         {
@@ -32,6 +34,7 @@ namespace RestaurantService.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("restaurant/{restaurantId}")]
         public ActionResult GetMenuItemsByRestaurantId(int restaurantId)
         {

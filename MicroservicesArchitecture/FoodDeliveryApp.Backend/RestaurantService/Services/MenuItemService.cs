@@ -14,7 +14,12 @@ namespace RestaurantService.API.Services
 
         public MenuItem getMenuItemById(int id)
         {
-            return _menuItemRepo.getMenuItemById(id);
+            var item = _menuItemRepo.getMenuItemById(id);
+            if(item == null)
+            {
+                throw new ArgumentException("Menu item not found!");
+            }
+            return item;
         }
 
         public IEnumerable<MenuItem> getMenuItemsByRestaurantId(int restaurantId)

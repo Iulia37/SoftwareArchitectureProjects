@@ -23,23 +23,23 @@ export class EditMenuItem implements OnInit {
   errors: string = '';
 
   ngOnInit() {
-    this.route.paramMap.pipe(
-      switchMap(params => {
+    this.route.paramMap.subscribe(params => {
         const id = params.get('id');
         if (id) {
-          return this.menuItemService.getMenuItemById(id);
+          return this.menuItemService.getMenuItemById(id).subscribe({
+            next: (item) => {
+              this.originalItem = item;
+              this.initForm(item);
+            },
+            error: (err) => {
+              this.router.navigate(['/error'], { state: { error: err.error} });
+            }
+          });
         }
-        return of(null);
-      })
-    ).subscribe({
-      next: (item) => {
-        this.originalItem = item;
-        this.initForm(item);
-      },
-      error: (err) => {
-        this.router.navigate(['/error'], { state: { error: err} });
+        this.router.navigate(['/error'], { state: { error: 'Not found' } });
+        return;
       }
-    });
+    )
   }
 
   initForm(menuItem: MenuItem | null) {

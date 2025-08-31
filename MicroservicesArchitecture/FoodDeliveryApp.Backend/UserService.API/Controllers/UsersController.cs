@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UserService.API.Models;
 using UserService.API.Services;
 
 namespace UserService.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : Controller
@@ -18,12 +21,18 @@ namespace UserService.API.Controllers
         [HttpGet("{id}")]
         public IActionResult getUserById(int id)
         {
-            var user = _userService.getUserById(id);
-            if (user == null)
+            try
             {
-                return BadRequest("User not found!");
+                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                var user = _userService.getUserById(id, currentUserId);
+
+                return Ok(user);
             }
-            return Ok(user);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

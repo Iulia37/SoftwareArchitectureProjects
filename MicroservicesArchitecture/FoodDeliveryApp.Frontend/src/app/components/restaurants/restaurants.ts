@@ -23,7 +23,7 @@ export class Restaurants implements OnInit {
         this.restaurants.set(restaurants);
       },
       error: (err) => {
-        this.router.navigate(['/error'], { state: { error: err} });
+        this.router.navigate(['/error'], { state: { error: err.error } });
       }
     })
   }

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Nelibur.ObjectMapper;
 using RestaurantService.API.DTOs;
 using RestaurantService.API.Models;
@@ -7,6 +7,7 @@ using RestaurantService.API.Services;
 
 namespace RestaurantService.API.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class RestaurantsController : Controller
@@ -18,6 +19,7 @@ namespace RestaurantService.API.Controllers
             _restaurantService = restaurantService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult GetAllRestaurants()
         {
@@ -29,6 +31,7 @@ namespace RestaurantService.API.Controllers
             return Ok(restaurants);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public ActionResult GetRestaurantById(int id)
         {

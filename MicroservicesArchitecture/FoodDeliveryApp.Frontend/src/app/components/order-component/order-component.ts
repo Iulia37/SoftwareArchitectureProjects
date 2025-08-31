@@ -40,7 +40,7 @@ export class OrderComponent {
         this.router.navigate(['/payment'], { queryParams: { orderId: createdOrder.id}});
       },
       error: (err) => {
-        this.router.navigate(['/error'], { state: { error: err} });
+        this.router.navigate(['/error'], { state: { error: err.error} });
       }
     });
   }

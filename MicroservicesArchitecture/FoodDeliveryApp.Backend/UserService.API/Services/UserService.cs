@@ -12,9 +12,18 @@ namespace UserService.API.Services
         {
             _userRepository = userRepository;
         }
-        public User getUserById(int id)
+        public User getUserById(int id, int currentUser)
         {
-            return _userRepository.getUserById(id);
+            var user = _userRepository.getUserById(id);
+            if(user == null)
+            {
+                throw new KeyNotFoundException("User not found!");
+            }
+            if (user.Id != currentUser)
+            {
+                throw new UnauthorizedAccessException("You cannot access this user!");
+            }
+            return user;
         }
         public User getUserByUsername(string username)
         {

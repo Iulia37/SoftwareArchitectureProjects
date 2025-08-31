@@ -34,7 +34,7 @@ export class UserDetails implements OnInit {
           this.user.set(user);
         },
         error: (err) => {
-          this.router.navigate(['/error'], { state: { error: err} });
+          this.router.navigate(['/error'], { state: { error: err.error} });
         }
       });
     }

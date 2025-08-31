@@ -50,7 +50,7 @@ export class RestaurantDetails implements OnInit {
         this.menuItems.set(menuItems)
       },
       error: (err) => {
-        this.router.navigate(['/error'], { state: { error: err} });
+        this.router.navigate(['/error'], { state: { error: err.error} });
       }
     });
   }

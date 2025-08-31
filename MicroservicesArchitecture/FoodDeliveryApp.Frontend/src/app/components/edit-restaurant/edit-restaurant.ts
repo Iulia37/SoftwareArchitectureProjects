@@ -46,7 +46,7 @@ export class EditRestaurant implements OnInit{
         this.initForm(restaurant);
       },
       error: (err) => {
-        this.router.navigate(['/error'], { state: { error: err} });
+        this.router.navigate(['/error'], { state: { error: err.error} });
       }
     });
   }

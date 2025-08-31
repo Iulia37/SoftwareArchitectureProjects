@@ -3,9 +3,11 @@ using Nelibur.ObjectMapper;
 using OrderService.API.DTOs;
 using OrderService.API.Services;
 using OrderService.API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OrderService.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : Controller
