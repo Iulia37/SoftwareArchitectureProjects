@@ -91,5 +91,19 @@ namespace OrderService.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("{orderId}/items")]
+        public IActionResult GetOrderItemsByOrderId(int orderId)
+        {
+            try
+            {
+                var orderItems = _orderService.GetOrderItemsByOrderId(orderId);
+                return Ok(orderItems);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

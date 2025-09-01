@@ -8,11 +8,11 @@ import { MenuItem } from '../../models/menu-item.type'
 import { forkJoin, of, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MenuItem as M } from '../menu-item/menu-item';
-import { OrderComponent } from "../order-component/order-component";
+import { CreateOrder } from "../create-order/create-order";
 
 @Component({
   selector: 'app-restaurant-details',
-  imports: [CommonModule, M, OrderComponent, RouterLink],
+  imports: [CommonModule, M, CreateOrder, RouterLink],
   templateUrl: './restaurant-details.html',
   styleUrl: './restaurant-details.scss'
 })

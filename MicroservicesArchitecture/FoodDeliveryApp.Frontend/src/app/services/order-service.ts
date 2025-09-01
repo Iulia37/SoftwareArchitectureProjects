@@ -56,4 +56,8 @@ export class OrderService {
     this._orderItems.set([]);
   }
 
+  getOrderItemsByOrderId(orderId: string) {
+    const url = `${this.apiUrl}/${orderId}/items`;
+    return this.http.get<Array<OrderItem>>(url);
+  }
 }

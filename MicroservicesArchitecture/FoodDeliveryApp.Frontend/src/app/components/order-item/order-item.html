@@ -1,0 +1,12 @@
+<div class="order-container">
+  <div class="order-header">
+    <div class="order-price">{{ order().totalPrice }}$</div>
+    <div class="order-date">{{ order().orderDate | date:'dd.MM.yyyy' }}</div>
+  </div>
+  <div class="order-status">
+    Status: <div class="status">{{ order().status }}</div>
+  </div>
+  <div class="order-actions">
+    <button class="btn-details" (click)="orderDetails()">Order Details</button>
+  </div>
+</div>

@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
 import { Order } from '../../models/order.type';
 
 @Component({
-  selector: 'app-order-component',
+  selector: 'app-create-order',
   imports: [CommonModule],
-  templateUrl: './order-component.html',
-  styleUrl: './order-component.scss'
+  templateUrl: './create-order.html',
+  styleUrl: './create-order.scss'
 })
-export class OrderComponent {
+export class CreateOrder {
   private orderService = inject(OrderService);
   private router = inject(Router);
   authService = inject(AuthService);

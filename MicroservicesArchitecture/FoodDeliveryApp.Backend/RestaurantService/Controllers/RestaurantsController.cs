@@ -24,7 +24,7 @@ namespace RestaurantService.API.Controllers
         public ActionResult GetAllRestaurants()
         {
             var restaurants = _restaurantService.GetAllRestaurants();
-            if(!restaurants.Any())
+            if (!restaurants.Any())
             {
                 return BadRequest("No restaurants found!");
             }
@@ -102,6 +102,20 @@ namespace RestaurantService.API.Controllers
             try
             {
                 return Ok(new { imageUrl = _restaurantService.UploadImage(upload.File) });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{id}/name")]
+        public ActionResult GetRestaurantNameById(int id)
+        {
+            try{
+                var name = _restaurantService.getRestaurantName(id);
+                return Content(name);
             }
             catch (ArgumentException ex)
             {

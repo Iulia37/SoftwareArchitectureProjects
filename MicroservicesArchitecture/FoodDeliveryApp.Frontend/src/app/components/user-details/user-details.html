@@ -1,4 +1,11 @@
 <div class="user-container">
-    <div>Username: {{  user()?.username }}</div>
-    <div>Email: {{ user()?.email }}</div>
+    <div class="user-details">
+        <div class="user-info">Username: {{  user()?.username }}</div>
+        <div class="user-info">Email: {{ user()?.email }}</div>
+    </div>
+    <div class="orders">
+        @for(order of userOrders(); track order.id){
+            <app-order-item [order]="order"></app-order-item>
+        }
+    </div>
 </div>

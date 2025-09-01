@@ -40,4 +40,8 @@ export class RestaurantService {
     return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/image`, formData);
   }
 
+  getRestaurantName = (id: number) => {
+    const url = `${this.apiUrl}/${id}/name`;
+    return this.http.get(url, { responseType: 'text' });
+  }
 }

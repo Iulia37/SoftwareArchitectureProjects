@@ -27,6 +27,7 @@ namespace OrderService.API.Services
 
         public void AddOrder(Order order, OrderItem[] orderItems)
         {
+            order.OrderDate = DateTime.Now;
             _orderRepository.AddOrder(order, orderItems);
         }
 
@@ -41,6 +42,8 @@ namespace OrderService.API.Services
             order.TotalPrice = updatedOrder.TotalPrice;
             order.Status = updatedOrder.Status;
             order.RestaurantId = updatedOrder.RestaurantId;
+            order.UserId = updatedOrder.UserId;
+            order.OrderDate = updatedOrder.OrderDate;
 
             _orderRepository.UpdateOrder(order);
         }
@@ -58,7 +61,12 @@ namespace OrderService.API.Services
 
         public IEnumerable<OrderItem> GetOrderItemsByOrderId(int orderId)
         {
-            return _orderRepository.GetOrderItemsByOrderId(orderId);
+            var items = _orderRepository.GetOrderItemsByOrderId(orderId);
+            if(items == null || !items.Any())
+            {
+                throw new ArgumentException("No items found for this order!");
+            }
+            return items;
         }
     }
 }

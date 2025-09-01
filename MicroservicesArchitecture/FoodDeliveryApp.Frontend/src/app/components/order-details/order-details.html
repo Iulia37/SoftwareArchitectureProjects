@@ -1,0 +1,23 @@
+<div class="order-details">
+  <div class="order-header">
+    <div class="restaurant-status-container">
+        <h2 class="restaurant-name">{{ restaurantName() }}</h2>
+        <span class="status-badge">{{ order()?.status }}</span>
+    </div>
+    <div class="order-info">
+      <span class="order-price">Total: {{ order()?.totalPrice }}$</span>
+      <span class="order-date">{{ order()?.orderDate | date:'dd.MM.yyyy' }}</span>
+    </div>
+  </div>
+
+  <div class="order-items">
+    <h3>Items Ordered</h3>
+    <ul>
+      <li *ngFor="let item of orderItems()">
+        <span class="item-name">{{ item.menuItemName }}</span>
+        <span class="item-quantity">x{{ item.quantity }}</span>
+        <span class="item-price">{{ item.unitPrice}}$</span>
+      </li>
+    </ul>
+  </div>
+</div>

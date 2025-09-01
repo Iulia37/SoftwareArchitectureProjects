@@ -14,5 +14,7 @@ namespace OrderService.API.DTOs
         public decimal TotalPrice { get; set; }
 
         public string Status { get; set; }
+
+        public DateTime OrderDate { get; set; }
     }
 }

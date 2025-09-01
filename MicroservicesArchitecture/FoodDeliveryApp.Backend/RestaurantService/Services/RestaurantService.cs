@@ -83,5 +83,15 @@ namespace RestaurantService.API.Services
             var relativeUrl = $"/images/{fileName}";
             return relativeUrl;
         }
+
+        public string getRestaurantName(int id)
+        {
+            var restaurant = _restaurantRepository.GetRestaurantById(id);
+            if (restaurant == null)
+            {
+                throw new ArgumentException("Restaurant not found!");
+            }
+            return restaurant.Name;
+        }
     }
 }
