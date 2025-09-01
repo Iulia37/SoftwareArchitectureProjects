@@ -4,9 +4,9 @@ namespace OrderService.API.Services
 {
     public interface IOrderService
     {
-        public Order GetOrderById(int id);
+        public Order GetOrderById(int id, int currentUserId);
 
-        public IEnumerable<Order> GetAllOrdersByUserId(int id);
+        public IEnumerable<Order> GetAllOrdersByUserId(int id, int currentUserId);
 
         public void AddOrder(Order order, OrderItem[] orderItems);
 

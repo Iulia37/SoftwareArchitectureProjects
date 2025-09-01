@@ -33,4 +33,22 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  .my-hr {
+    border: none;
+    height: 2px;
+    background-color: #ccc;
+    margin-bottom: 15px;
+  }
+
+  .orders-title{
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(67, 66, 66);
+  }
+
+  .no-orders{
+    color: rgb(154, 150, 150);
+    margin: 50px auto;
+  }
 }

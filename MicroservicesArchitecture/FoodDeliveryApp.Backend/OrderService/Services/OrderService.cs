@@ -10,18 +10,26 @@ namespace OrderService.API.Services
         {
             _orderRepository = orderRepository;
         }
-        public Order GetOrderById(int id)
+        public Order GetOrderById(int id, int currentUserId)
         {
             var order = _orderRepository.GetOrderById(id);
             if(order == null)
             {
                 throw new ArgumentException("Order not found!");
             }
+            if(order.UserId != currentUserId)
+            {
+                throw new ArgumentException("You are not authorized to view this order!");
+            }
             return order;
         }
 
-        public IEnumerable<Order> GetAllOrdersByUserId(int id)
+        public IEnumerable<Order> GetAllOrdersByUserId(int id, int currentUserId)
         {
+            if(id != currentUserId)
+            {
+                throw new ArgumentException("You are not authorized to view these orders!");
+            }
             return _orderRepository.GetAllOrdersByUserId(id);
         }
 

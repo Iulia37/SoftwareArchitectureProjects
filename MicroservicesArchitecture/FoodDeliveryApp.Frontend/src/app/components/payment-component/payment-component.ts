@@ -17,6 +17,7 @@ export class PaymentComponent implements OnInit{
   private paymentService = inject(PaymentService);
   private orderService = inject(OrderService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   order = signal<Order | null>(null);
   paymentMethod: string = 'card';
@@ -53,6 +54,7 @@ export class PaymentComponent implements OnInit{
         next: () => {
           this.loading = false;
           this.message = 'Payment completed successfully!';
+          this.router.navigate(['/restaurants']);
         },
         error: () => {
           this.loading = false;

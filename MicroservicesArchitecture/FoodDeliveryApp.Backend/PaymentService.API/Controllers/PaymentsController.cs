@@ -62,6 +62,7 @@ namespace PaymentService.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult updatePayment(int id, [FromBody] PaymentDTO paymentDto)
         {
@@ -77,6 +78,7 @@ namespace PaymentService.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult deletePayment(int id)
         {

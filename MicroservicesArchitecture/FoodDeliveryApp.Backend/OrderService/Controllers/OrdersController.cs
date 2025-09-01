@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Nelibur.ObjectMapper;
 using OrderService.API.DTOs;
-using OrderService.API.Services;
 using OrderService.API.Models;
-using Microsoft.AspNetCore.Authorization;
+using OrderService.API.Services;
+using System.Security.Claims;
 
 namespace OrderService.API.Controllers
 {
@@ -24,7 +25,8 @@ namespace OrderService.API.Controllers
         {
             try
             {
-                var order = _orderService.GetOrderById(orderId);
+                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var order = _orderService.GetOrderById(orderId, currentUserId);
                 return Ok(order);
             }
             catch (ArgumentException ex)
@@ -36,7 +38,16 @@ namespace OrderService.API.Controllers
         [HttpGet("user/{userId}")]
         public IActionResult GetOrdersByUserId(int userId)
         {
-            return Ok(_orderService.GetAllOrdersByUserId(userId));
+            try
+            {
+                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var orders = _orderService.GetAllOrdersByUserId(userId, currentUserId);
+                return Ok(orders);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -63,6 +74,7 @@ namespace OrderService.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult UpdateOrder(int id, [FromBody] OrderDTO orderDto)
         {
@@ -78,6 +90,7 @@ namespace OrderService.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id)
         {

@@ -4,8 +4,17 @@
         <div class="user-info">Email: {{ user()?.email }}</div>
     </div>
     <div class="orders">
-        @for(order of userOrders(); track order.id){
-            <app-order-item [order]="order"></app-order-item>
+        <div>
+            <div class="orders-title">Your orders:</div>
+            <hr class="my-hr" />
+        </div>
+        @if(userOrders().length > 0){
+            @for(order of userOrders(); track order.id){
+                <app-order-item [order]="order"></app-order-item>
+            }
+        }
+        @else {
+            <div class="no-orders">You have no orders yet</div>
         }
     </div>
 </div>
